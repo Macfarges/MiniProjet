@@ -19,6 +19,6 @@ public class MainActivity extends AppCompatActivity {
         tv.setText("MainActivity");
         // remplacer tout le contenu de notre activité par le TextView
         setContentView(tv);
-        //setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
     }
 }
