@@ -1,9 +1,9 @@
 package helloandroid.ut3.miniprojet;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     //TODO: Afficher liste de restaurants
