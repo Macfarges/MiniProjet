@@ -1,4 +1,4 @@
-package helloandroid.ut3.miniprojet.data;
+package helloandroid.ut3.miniprojet.data.domain;
 
 public class Restaurant {
     private String id;
