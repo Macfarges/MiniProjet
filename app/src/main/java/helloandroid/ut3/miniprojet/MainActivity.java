@@ -5,6 +5,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DatabaseReference;
+
+import helloandroid.ut3.miniprojet.data.service.FirebaseManager;
+
 public class MainActivity extends AppCompatActivity {
     //TODO: Afficher liste de restaurants
     //TODO: Afficher Bouton d'accès à la carte avec photos
@@ -19,6 +23,10 @@ public class MainActivity extends AppCompatActivity {
         tv.setText("MainActivity");
         // remplacer tout le contenu de notre activité par le TextView
         setContentView(tv);
+
+        final FirebaseManager database = FirebaseManager.getInstance();
+        DatabaseReference ref = database.getRestaurantsRef();
         setContentView(R.layout.activity_main);
+
     }
 }
