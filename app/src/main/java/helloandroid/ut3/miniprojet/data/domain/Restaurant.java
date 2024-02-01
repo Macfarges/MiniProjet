@@ -14,6 +14,10 @@ public class Restaurant {
 
     private String crousAndGoSrc;
 
+    protected Restaurant() {
+        // Default constructor required for calls to DataSnapshot.getValue(Restaurant.class)
+    }
+
     // Constructor
     public Restaurant(String id, String title, String openingHours, String closingTime,
                       String shortDesc, String lat, String lon, String zone,
