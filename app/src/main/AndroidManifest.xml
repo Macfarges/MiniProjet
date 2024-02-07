@@ -17,10 +17,14 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".RestaurantActivity"/>
+        <activity android:name=".MapActivity"/>
+        <activity android:name=".PhotoActivity"/>
+        <activity android:name=".ReservationActivity"/>
+        <activity android:name=".ReviewActivity"/>
     </application>
 
 </manifest>

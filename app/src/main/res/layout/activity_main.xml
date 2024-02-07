@@ -7,6 +7,7 @@
     tools:context=".MainActivity">
 
     <ListView
+        android:id="@+id/restaurantsList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
@@ -26,18 +27,5 @@
         app:layout_constraintVertical_bias="0.975"
         app:srcCompat="@drawable/baseline_map_24"
         app:tint="@color/orange" />
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="@string/fab_content_desc"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

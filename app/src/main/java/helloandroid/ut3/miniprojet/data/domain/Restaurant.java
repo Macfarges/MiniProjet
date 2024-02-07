@@ -83,18 +83,6 @@ public class Restaurant {
     // Override toString for easy printing
     @Override
     public String toString() {
-        return "Restaurant{" +
-                "id='" + id + '\'' +
-                ", title='" + title + '\'' +
-                ", openingHours='" + openingHours + '\'' +
-                ", closingTime='" + closingTime + '\'' +
-                ", shortDesc='" + shortDesc + '\'' +
-                ", lat='" + lat + '\'' +
-                ", lon='" + lon + '\'' +
-                ", zone='" + zone + '\'' +
-                ", infos='" + infos + '\'' +
-                ", contact='" + contact + '\'' +
-                ", crousAndGoSrc='" + crousAndGoSrc + '\'' +
-                '}';
+        return title;
     }
 }

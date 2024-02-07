@@ -2,4 +2,8 @@
     <string name="app_name">MiniProjet</string>
     <string name="fab_content_desc">bruh</string>
     <string name="regeger">regeger</string>
+    <string name="PlaceholderString">Placeholder</string>
+    <string name="retour">Retour</string>
+    <string name="reserver">Réserver</string>
+    <string name="todo">TODO</string>
 </resources>
