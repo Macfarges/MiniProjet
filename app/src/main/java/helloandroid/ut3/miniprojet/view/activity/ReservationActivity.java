@@ -1,16 +1,17 @@
-package helloandroid.ut3.miniprojet;
+package helloandroid.ut3.miniprojet.view.activity;
 
 import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class ReviewActivity extends AppCompatActivity {
+public class ReservationActivity extends AppCompatActivity {
     //TODO: Ajouter bouton retour
     //TODO: Ajouter bouton suivant
-    //TODO: Ajouter saisie texte
-    //TODO: Ajouter bouton mettre une photo
-    //TODO: Ajouter liste des photos mises (cliquable)
+    //TODO: Ajouter saisie date
+    //TODO: Ajouter saisie nbPersonnes
+    //TODO: Ajouter saisie heure
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,7 +19,7 @@ public class ReviewActivity extends AppCompatActivity {
         // d'afficher du texte
         TextView tv = new TextView(this);
         // configurer le texte à faire afficher par notre widget
-        tv.setText("review");
+        tv.setText("reserver");
         // remplacer tout le contenu de notre activité par le TextView
         setContentView(tv);
         //setContentView(R.layout.activity_main);

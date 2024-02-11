@@ -1,17 +1,13 @@
-package helloandroid.ut3.miniprojet;
+package helloandroid.ut3.miniprojet.view.activity;
 
 import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class PhotoActivity extends AppCompatActivity {
+public class MapActivity extends AppCompatActivity {
     //TODO: Ajouter bouton retour
-    //TODO: Ajouter bouton suivant
-    //TODO: Ajouter image prise par l'appareil photo
-    //TODO: Ajouter bouton filtre 1
-    //TODO: Ajouter bouton filtre 2
-    //TODO: Ajouter bouton stickers => implique activité stickers ?
+    //TODO: Ajouter carte avec restaurants et photos (Google maps)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,7 +15,7 @@ public class PhotoActivity extends AppCompatActivity {
         // d'afficher du texte
         TextView tv = new TextView(this);
         // configurer le texte à faire afficher par notre widget
-        tv.setText("Photo");
+        tv.setText("map");
         // remplacer tout le contenu de notre activité par le TextView
         setContentView(tv);
         //setContentView(R.layout.activity_main);

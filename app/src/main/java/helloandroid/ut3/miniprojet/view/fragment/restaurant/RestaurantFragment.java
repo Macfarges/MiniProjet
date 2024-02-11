@@ -1,4 +1,4 @@
-package helloandroid.ut3.miniprojet;
+package helloandroid.ut3.miniprojet.view.fragment.restaurant;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,15 +10,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import helloandroid.ut3.miniprojet.R;
 import helloandroid.ut3.miniprojet.data.domain.Restaurant;
 
 public class RestaurantFragment extends Fragment {
 
     private final Restaurant restaurant;
 
-    private TextView restauName;
-    private TextView restauAdress;
-    private Bundle entryData;
+    private TextView restaurantNameTv;
+    private TextView restauAdressTv;
 
     public RestaurantFragment(Restaurant restaurant) {
         super(R.layout.restaurant_fragment);
@@ -36,10 +36,10 @@ public class RestaurantFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.restaurant_fragment, container, false);
-        restauName = view.findViewById(R.id.RestauName);
-        restauAdress = view.findViewById(R.id.RestauAdress);
-        restauName.setText(restaurant.getTitle());
-        restauAdress.setText(restaurant.getShortDesc());
+        restaurantNameTv = view.findViewById(R.id.RestauName);
+        restauAdressTv = view.findViewById(R.id.RestauAdress);
+        restaurantNameTv.setText(restaurant.getTitle());
+        restauAdressTv.setText(restaurant.getShortDesc());
         return view;
     }
 

@@ -1,4 +1,4 @@
-package helloandroid.ut3.miniprojet;
+package helloandroid.ut3.miniprojet.view.fragment.restaurant;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +15,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
+import helloandroid.ut3.miniprojet.R;
 import helloandroid.ut3.miniprojet.data.domain.Restaurant;
 import helloandroid.ut3.miniprojet.data.service.FirebaseManager;
 
