@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -48,10 +47,8 @@ public class ListRestaurantFragment extends Fragment {
                 restaurantsArray.addAll(restaurants);
                 listView.setAdapter(arrayAdapter);
                 listView.setOnItemClickListener((adapter, view, position, arg) -> {
-                    Fragment restaurantFragment = new RestaurantFragment(restaurantsArray.get(position));
-                    FragmentManager fragmentManager = getParentFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fragmentContainerView, restaurantFragment, null)
+                    getParentFragmentManager().beginTransaction()
+                            .replace(R.id.fragmentContainerView, new RestaurantFragment(restaurantsArray.get(position)), null)
                             .setReorderingAllowed(true)
                             .addToBackStack(null)
                             .commit();

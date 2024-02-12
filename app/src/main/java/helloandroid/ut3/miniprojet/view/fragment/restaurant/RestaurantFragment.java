@@ -10,14 +10,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import org.jetbrains.annotations.NotNull;
+
 import helloandroid.ut3.miniprojet.R;
 import helloandroid.ut3.miniprojet.data.domain.Restaurant;
+import helloandroid.ut3.miniprojet.view.fragment.review.form.ReviewFormFragment;
 
 public class RestaurantFragment extends Fragment {
 
     private final Restaurant restaurant;
     private final View.OnClickListener leaveReviewAction = v -> {
-        // TODO implement action
+        getParentFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContainerView, new ReviewFormFragment("test"), null)
+                .setReorderingAllowed(true)
+                .addToBackStack(null)
+                .commit();
     };
 
     //TODO: Ajouter bouton retour
@@ -30,7 +37,7 @@ public class RestaurantFragment extends Fragment {
         // TODO implement action
     };
 
-    public RestaurantFragment(Restaurant restaurant) {
+    public RestaurantFragment(@NotNull Restaurant restaurant) {
         this.restaurant = restaurant;
     }
 
