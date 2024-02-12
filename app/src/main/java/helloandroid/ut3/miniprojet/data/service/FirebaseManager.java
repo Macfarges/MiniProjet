@@ -1,5 +1,7 @@
 package helloandroid.ut3.miniprojet.data.service;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -10,10 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import helloandroid.ut3.miniprojet.data.domain.Restaurant;
+import helloandroid.ut3.miniprojet.data.domain.Review;
 
 public class FirebaseManager {
     private static final String RESTAURANTS_NODE = "restaurants";
-    private static final String ADVICES_NODE = "advices";
+    private static final String REVIEWS_NODE = "reviews";
     private static final String RESERVATIONS_NODE = "reservations";
     private static final String IMAGES_NODE = "images";
 
@@ -37,28 +40,27 @@ public class FirebaseManager {
         }
     }
 
-    // Get reference to the root of the database
-    public DatabaseReference getRootRef() {
+    public void addReview(Review review) {
+        getReviewsRef().child(review.getId()).setValue(review);
+    }
+
+    private DatabaseReference getRootRef() {
         return database.getReference();
     }
 
-    // Get reference to the restaurants node
-    public DatabaseReference getRestaurantsRef() {
+    private DatabaseReference getRestaurantsRef() {
         return getRootRef().child(RESTAURANTS_NODE);
     }
 
-    // Get reference to the advices node
-    public DatabaseReference getAdvicesRef() {
-        return getRootRef().child(ADVICES_NODE);
+    private DatabaseReference getReviewsRef() {
+        return getRootRef().child(REVIEWS_NODE);
     }
 
-    // Get reference to the reservations node
-    public DatabaseReference getReservationsRef() {
+    private DatabaseReference getReservationsRef() {
         return getRootRef().child(RESERVATIONS_NODE);
     }
 
-    // Get reference to the images node
-    public DatabaseReference getImagesRef() {
+    private DatabaseReference getImagesRef() {
         return getRootRef().child(IMAGES_NODE);
     }
 
@@ -66,7 +68,7 @@ public class FirebaseManager {
         DatabaseReference restaurantsRef = getRestaurantsRef();
         restaurantsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<Restaurant> restaurantList = new ArrayList<>();
                 for (DataSnapshot restaurantSnapshot : dataSnapshot.getChildren()) {
                     Restaurant restaurant = restaurantSnapshot.getValue(Restaurant.class);
@@ -78,13 +80,35 @@ public class FirebaseManager {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
                 callback.onError(databaseError.toException());
             }
         });
     }
 
-    // Callback interface to handle asynchronous data retrieval
+    public void getReviewsForRestaurant(String restaurantId, final DataCallback<List<Review>> callback) {
+        DatabaseReference reviewsRef = getReviewsRef();
+        reviewsRef.orderByChild("restaurant/id").equalTo(restaurantId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        List<Review> reviewList = new ArrayList<>();
+                        for (DataSnapshot reviewSnapshot : dataSnapshot.getChildren()) {
+                            Review review = reviewSnapshot.getValue(Review.class);
+                            if (review != null) {
+                                reviewList.add(review);
+                            }
+                        }
+                        callback.onSuccess(reviewList);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        callback.onError(databaseError.toException());
+                    }
+                });
+    }
+
     public interface DataCallback<T> {
         void onSuccess(T data);
 

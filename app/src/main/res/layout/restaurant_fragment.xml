@@ -8,7 +8,6 @@
     <!--        android:id="@+id/RestauImg"-->
     <!--        android:layout_width="match_parent"-->
     <!--        android:layout_height="wrap_content"-->
-    <!--        android:contentDescription="@string/todo"-->
     <!--        app:layout_constraintBottom_toBottomOf="parent"-->
     <!--        app:layout_constraintEnd_toEndOf="parent"-->
     <!--        app:layout_constraintStart_toStartOf="parent"-->
@@ -24,7 +23,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/RestauName"
+                android:id="@+id/restaurantName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -34,7 +33,7 @@
                 app:layout_constraintVertical_bias="0.050000012" />
 
             <TextView
-                android:id="@+id/RestauAdress"
+                android:id="@+id/restaurantShortDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
@@ -47,12 +46,10 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/back_to_menu"
+        android:id="@+id/leaveReviewBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/PlaceholderString"
-        android:onClick="startMainActivity"
-        android:text="@string/retour"
+        android:text="@string/review"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.15"
@@ -61,12 +58,10 @@
         app:layout_constraintVertical_bias="0.95" />
 
     <Button
-        android:id="@+id/reservation"
+        android:id="@+id/reserveBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/PlaceholderString"
-        android:onClick="startReserverActivity"
-        android:text="@string/reserver"
+        android:text="@string/reserve"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.85"

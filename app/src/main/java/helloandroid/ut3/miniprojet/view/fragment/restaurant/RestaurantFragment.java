@@ -16,14 +16,9 @@ import helloandroid.ut3.miniprojet.data.domain.Restaurant;
 public class RestaurantFragment extends Fragment {
 
     private final Restaurant restaurant;
-
-    private TextView restaurantNameTv;
-    private TextView restauAdressTv;
-
-    public RestaurantFragment(Restaurant restaurant) {
-        super(R.layout.restaurant_fragment);
-        this.restaurant = restaurant;
-    }
+    private final View.OnClickListener leaveReviewAction = v -> {
+        // TODO implement action
+    };
 
     //TODO: Ajouter bouton retour
     //TODO: Ajouter nom
@@ -31,25 +26,22 @@ public class RestaurantFragment extends Fragment {
     //TODO: Ajouter avis
     //TODO: Ajouter bouton donner son avis
     //TODO: Ajouter bouton réserver
+    private final View.OnClickListener reserveAction = v -> {
+        // TODO implement action
+    };
+
+    public RestaurantFragment(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.restaurant_fragment, container, false);
-        restaurantNameTv = view.findViewById(R.id.RestauName);
-        restauAdressTv = view.findViewById(R.id.RestauAdress);
-        restaurantNameTv.setText(restaurant.getTitle());
-        restauAdressTv.setText(restaurant.getShortDesc());
+        ((TextView) view.findViewById(R.id.restaurantName)).setText(restaurant.getTitle());
+        ((TextView) view.findViewById(R.id.restaurantShortDesc)).setText(restaurant.getShortDesc());
+        view.findViewById(R.id.leaveReviewBtn).setOnClickListener(leaveReviewAction);
+        view.findViewById(R.id.reserveBtn).setOnClickListener(reserveAction);
         return view;
-    }
-
-    public void startMainActivity(View view) {
-        /*Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);*/
-    }
-
-    public void startReserverActivity(View view) {
-        /*Intent intent = new Intent(this, ReservationActivity.class);
-        startActivity(intent);*/
     }
 }

@@ -20,21 +20,17 @@ import helloandroid.ut3.miniprojet.data.domain.Restaurant;
 import helloandroid.ut3.miniprojet.data.service.FirebaseManager;
 
 public class ListRestaurantFragment extends Fragment {
-    private ListView listView;
-    private FloatingActionButton fabMap;
-
     public ListRestaurantFragment() {
-        super(R.layout.fragment_list_restaurant);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list_restaurant, container, false);
-        listView = view.findViewById(R.id.restaurantsList);
-        fabMap = view.findViewById(R.id.fabMap);
+        ListView listView = view.findViewById(R.id.restaurantsList);
+        FloatingActionButton fabMap = view.findViewById(R.id.fabMap);
         fabMap.setOnClickListener(v -> {
-            //TODO: Implementer click bouton map
+//        TODO: Implementer click bouton map
 //            Fragment mapFragment = new MapFragment();
 //            FragmentManager fragmentManager = getParentFragmentManager();
 //            fragmentManager.beginTransaction()
