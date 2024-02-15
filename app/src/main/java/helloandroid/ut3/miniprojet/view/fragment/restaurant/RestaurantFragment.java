@@ -20,7 +20,6 @@ public class RestaurantFragment extends Fragment {
         // TODO implement action
     };
 
-    //TODO: Ajouter bouton retour
     //TODO: Ajouter nom
     //TODO: Ajouter adresse
     //TODO: Ajouter avis
