@@ -22,7 +22,7 @@ public class ReviewFormFragment extends Fragment {
     private TextView reviewTv;
     private TextView picturesTv;
     private List<ImageView> stars;
-    private int rating = 0;
+    private int rating = 3;
 
     public ReviewFormFragment(String restaurantId) {
         this.restaurantId = restaurantId;
@@ -37,11 +37,11 @@ public class ReviewFormFragment extends Fragment {
         picturesTv = rootView.findViewById(R.id.picturesTv);
         updatePicturesCount(0);
         stars = new ArrayList<>();
-        stars.add((ImageView) rootView.findViewById(R.id.star1));
-        stars.add((ImageView) rootView.findViewById(R.id.star2));
-        stars.add((ImageView) rootView.findViewById(R.id.star3));
-        stars.add((ImageView) rootView.findViewById(R.id.star4));
-        stars.add((ImageView) rootView.findViewById(R.id.star5));
+        stars.add(rootView.findViewById(R.id.star1));
+        stars.add(rootView.findViewById(R.id.star2));
+        stars.add(rootView.findViewById(R.id.star3));
+        stars.add(rootView.findViewById(R.id.star4));
+        stars.add(rootView.findViewById(R.id.star5));
         for (ImageView star : stars) {
             star.setOnClickListener(v -> onStarClick(star));
         }

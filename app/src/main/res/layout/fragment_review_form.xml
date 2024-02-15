@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:contentDescription="@string/star"
-            android:src="@drawable/ic_star_outline_34"
+            android:src="@drawable/ic_star_filled_34"
             android:tag="1" />
 
         <ImageView
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:contentDescription="@string/star"
-            android:src="@drawable/ic_star_outline_34"
+            android:src="@drawable/ic_star_filled_34"
             android:tag="2" />
 
         <ImageView
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:contentDescription="@string/star"
-            android:src="@drawable/ic_star_outline_34"
+            android:src="@drawable/ic_star_filled_34"
             android:tag="3" />
 
         <ImageView
