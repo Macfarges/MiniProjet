@@ -16,16 +16,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import helloandroid.ut3.miniprojet.R;
+import helloandroid.ut3.miniprojet.data.domain.Restaurant;
 
 public class ReviewFormFragment extends Fragment {
-    private final String restaurantId;
-    private TextView reviewTv;
+    private final Restaurant restaurant;
+    private TextView reviewEditText;
     private TextView picturesTv;
     private List<ImageView> stars;
     private int rating = 3;
 
-    public ReviewFormFragment(String restaurantId) {
-        this.restaurantId = restaurantId;
+    public ReviewFormFragment(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 
     @Nullable
@@ -33,7 +34,8 @@ public class ReviewFormFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_review_form, container, false);
-        reviewTv = rootView.findViewById(R.id.reviewTv);
+        ((TextView) rootView.findViewById(R.id.restaurantTitle)).setText(restaurant.getTitle());
+        reviewEditText = rootView.findViewById(R.id.reviewEditText);
         picturesTv = rootView.findViewById(R.id.picturesTv);
         updatePicturesCount(0);
         stars = new ArrayList<>();

@@ -19,13 +19,6 @@ import helloandroid.ut3.miniprojet.view.fragment.review.form.ReviewFormFragment;
 public class RestaurantFragment extends Fragment {
 
     private final Restaurant restaurant;
-    private final View.OnClickListener leaveReviewAction = v -> {
-        getParentFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainerView, new ReviewFormFragment("test"), null)
-                .setReorderingAllowed(true)
-                .addToBackStack(null)
-                .commit();
-    };
 
     //TODO: Ajouter bouton retour
     //TODO: Ajouter nom
@@ -44,6 +37,12 @@ public class RestaurantFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        final View.OnClickListener leaveReviewAction = v -> getParentFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContainerView, new ReviewFormFragment(restaurant), null)
+                .setReorderingAllowed(true)
+                .addToBackStack(null)
+                .commit();
+
         View view = inflater.inflate(R.layout.restaurant_fragment, container, false);
         ((TextView) view.findViewById(R.id.restaurantName)).setText(restaurant.getTitle());
         ((TextView) view.findViewById(R.id.restaurantShortDesc)).setText(restaurant.getShortDesc());

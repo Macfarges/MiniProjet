@@ -4,27 +4,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/restaurantTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/marginTop"
+        android:gravity="center"
+        android:text="@string/templateRestaurantName"
+        android:textSize="@dimen/h1Size"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
-        android:id="@+id/reviewTv"
+        android:id="@+id/reviewEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/marginTop"
         android:autofillHints="reviewString"
         android:gravity="top"
         android:hint="@string/enterYourReview"
         android:inputType="textMultiLine"
-        android:minLines="6"
+        android:lines="6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/restaurantTitle" />
 
     <LinearLayout
         android:id="@+id/rating_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/marginTop"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/reviewTv">
+        app:layout_constraintTop_toBottomOf="@id/reviewEditText">
 
         <ImageView
             android:id="@+id/star1"
@@ -72,25 +87,33 @@
             android:tag="5" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/picturesTv"
+    <ScrollView
+        android:id="@+id/scrollViewImages"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/picturesLabel"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/submitReviewBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rating_layout" />
+        app:layout_constraintTop_toBottomOf="@id/rating_layout">
 
+        <TextView
+            android:id="@+id/picturesTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/marginTop"
+            android:text="@string/picturesLabel" />
 
-    <!-- FIXME button not visible when keyboard is open -->
+    </ScrollView>
+
     <Button
         android:id="@+id/submitReviewBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/submit_review"
+        android:text="@string/submitReview"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/scrollViewImages"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

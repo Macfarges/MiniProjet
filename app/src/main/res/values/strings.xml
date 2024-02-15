@@ -1,10 +1,11 @@
 <resources>
     <string name="reserve">Réserver</string>
     <string name="review">Laisser un avis</string>
-    <string name="fab_map">Ouvrir la carte</string>
+    <string name="fabMap">Ouvrir la carte</string>
     <string name="appName">Mini projet</string>
     <string name="star">Etoile</string>
-    <string name="picturesLabel">Pictures (%d)</string>
-    <string name="enterYourReview">Entrez votre avis...</string>
-    <string name="submit_review">Ajouter cet avis</string>
+    <string name="picturesLabel">Images (%d)</string>
+    <string name="enterYourReview">Entrez votre avis…</string>
+    <string name="submitReview">Ajouter cet avis</string>
+    <string name="templateRestaurantName">Restaurant Name</string>
 </resources>
