@@ -1,6 +1,7 @@
 package helloandroid.ut3.miniprojet.view.fragment.restaurant;
 
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,7 @@ public class RestaurantFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.restaurant_fragment, container, false);
         ((TextView) view.findViewById(R.id.restaurantName)).setText(restaurant.getTitle());
-        ((TextView) view.findViewById(R.id.restaurantShortDesc)).setText(restaurant.getShortDesc());
+        ((TextView) view.findViewById(R.id.restaurantBody)).setText(Html.fromHtml(restaurant.getInfos().replaceAll("<img[^>]*>", ""), Html.FROM_HTML_MODE_LEGACY));
         view.findViewById(R.id.leaveReviewBtn).setOnClickListener(leaveReviewAction);
         view.findViewById(R.id.reserveBtn).setOnClickListener(reserveAction);
         return view;
