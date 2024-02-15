@@ -11,6 +11,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import helloandroid.ut3.miniprojet.data.domain.Booking;
 import helloandroid.ut3.miniprojet.data.domain.Restaurant;
 import helloandroid.ut3.miniprojet.data.domain.Review;
 
@@ -42,6 +43,21 @@ public class FirebaseManager {
 
     public void addReview(Review review) {
         getReviewsRef().child(review.getId()).setValue(review);
+    }
+
+    public void addBooking(Booking booking, final OnItemAddListener listener) {
+        getReservationsRef().child(booking.getId()).setValue(booking, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError == null) {
+                    // Review added successfully
+                    listener.onSuccess();
+                } else {
+                    // Error occurred while adding the review
+                    listener.onError(databaseError.getMessage());
+                }
+            }
+        });
     }
 
     private DatabaseReference getRootRef() {
@@ -107,6 +123,12 @@ public class FirebaseManager {
                         callback.onError(databaseError.toException());
                     }
                 });
+    }
+
+    public interface OnItemAddListener {
+        void onSuccess();
+
+        void onError(String errorMessage);
     }
 
     public interface DataCallback<T> {
