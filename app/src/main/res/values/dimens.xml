@@ -2,5 +2,9 @@
 <resources>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="marginTop">20dp</dimen>
+    <dimen name="marginTopSub">12dp</dimen>
     <dimen name="h1Size">24sp</dimen>
+    <dimen name="marginStart">5sp</dimen>
+    <dimen name="marginEnd">5sp</dimen>
+    <dimen name="imgLittleSquareDim">90dp</dimen>
 </resources>

@@ -8,4 +8,5 @@
     <string name="enterYourReview">Entrez votre avis…</string>
     <string name="submitReview">Ajouter cet avis</string>
     <string name="templateRestaurantName">Restaurant Name</string>
+    <string name="symbolAdd">+</string>
 </resources>
