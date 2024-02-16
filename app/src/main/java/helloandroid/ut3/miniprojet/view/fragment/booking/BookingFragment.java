@@ -20,7 +20,6 @@ import helloandroid.ut3.miniprojet.R;
 import helloandroid.ut3.miniprojet.data.domain.Booking;
 import helloandroid.ut3.miniprojet.data.domain.Restaurant;
 import helloandroid.ut3.miniprojet.data.service.FirebaseManager;
-import helloandroid.ut3.miniprojet.view.fragment.restaurant.RestaurantFragment;
 
 public class BookingFragment extends Fragment {
 
@@ -70,11 +69,7 @@ public class BookingFragment extends Fragment {
                 public void onSuccess() {
                     // Handle success
                     //Back button faking instead?
-                    getParentFragmentManager().beginTransaction()
-                            .replace(R.id.fragmentContainerView, new RestaurantFragment(restaurant), null)
-                            .setReorderingAllowed(true)
-                            .addToBackStack(null)
-                            .commit();
+                    getParentFragmentManager().popBackStack();
                 }
 
                 @Override
