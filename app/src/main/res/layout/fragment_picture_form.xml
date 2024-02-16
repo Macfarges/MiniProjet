@@ -6,14 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".view.fragment.picture.PictureFormFragment">
 
-    <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/progress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/addPictureTitle"
         android:layout_width="wrap_content"
@@ -25,11 +17,11 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/progress" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/pictureView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/marginTop"
@@ -47,11 +39,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView"
+        app:layout_constraintTop_toBottomOf="@id/pictureView"
         app:layout_constraintVertical_bias="1.0">
 
         <Button
-            android:id="@+id/selectImage"
+            android:id="@+id/selectPicture"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -59,7 +51,7 @@
             tools:ignore="ButtonStyle" />
 
         <Button
-            android:id="@+id/uploadImage"
+            android:id="@+id/returnPicture"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

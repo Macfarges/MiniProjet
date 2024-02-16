@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".view.fragment.review.form.ReviewFormFragment">
 
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progressIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
     <TextView
         android:id="@+id/restaurantTitle"
         android:layout_width="wrap_content"
@@ -17,7 +26,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/progressIndicator" />
 
     <EditText
         android:id="@+id/reviewEditText"
@@ -76,7 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:contentDescription="@string/star"
-            android:src="@drawable/ic_star_outline_34"
+            android:src="@drawable/ic_star_filled_34"
             android:tag="4" />
 
         <ImageView
@@ -85,7 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:contentDescription="@string/star"
-            android:src="@drawable/ic_star_outline_34"
+            android:src="@drawable/ic_star_filled_34"
             android:tag="5" />
     </LinearLayout>
 
@@ -96,11 +105,11 @@
         android:layout_marginStart="@dimen/marginStart"
         android:layout_marginTop="@dimen/marginTop"
         android:text="@string/picturesLabel"
-        app:layout_constraintBottom_toTopOf="@id/scrollViewImages"
+        app:layout_constraintBottom_toTopOf="@id/scrollViewPictures"
         app:layout_constraintTop_toBottomOf="@id/rating_layout" />
 
     <ScrollView
-        android:id="@+id/scrollViewImages"
+        android:id="@+id/scrollViewPictures"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/submitReviewBtn"
@@ -114,7 +123,7 @@
             android:orientation="vertical">
 
             <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/imagesLayout"
+                android:id="@+id/picturesLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginTopSub"
@@ -127,7 +136,7 @@
                 app:showDivider="beginning|middle">
 
                 <Button
-                    android:id="@+id/addImageButton"
+                    android:id="@+id/addPictureBtn"
                     android:layout_width="@dimen/imgLittleSquareDim"
                     android:layout_height="@dimen/imgLittleSquareDim"
                     android:insetTop="0dp"
@@ -147,7 +156,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/scrollViewImages"
+        app:layout_constraintTop_toBottomOf="@id/scrollViewPictures"
         app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
