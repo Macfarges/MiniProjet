@@ -4,27 +4,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/restaurantTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/marginTop"
+        android:gravity="center"
+        android:text="@string/templateRestaurantName"
+        android:textSize="@dimen/h1Size"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
-        android:id="@+id/reviewTv"
+        android:id="@+id/reviewEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/marginTop"
         android:autofillHints="reviewString"
         android:gravity="top"
         android:hint="@string/enterYourReview"
         android:inputType="textMultiLine"
-        android:minLines="6"
+        android:lines="6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/restaurantTitle" />
 
     <LinearLayout
         android:id="@+id/rating_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/marginTop"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/reviewTv">
+        app:layout_constraintTop_toBottomOf="@id/reviewEditText">
 
         <ImageView
             android:id="@+id/star1"
@@ -74,23 +89,258 @@
 
     <TextView
         android:id="@+id/picturesTv"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="@dimen/marginStart"
+        android:layout_marginTop="@dimen/marginTop"
         android:text="@string/picturesLabel"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/scrollViewImages"
         app:layout_constraintTop_toBottomOf="@id/rating_layout" />
 
+    <ScrollView
+        android:id="@+id/scrollViewImages"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/marginStart"
+        app:layout_constraintBottom_toTopOf="@id/submitReviewBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/picturesTv">
 
-    <!-- FIXME button not visible when keyboard is open -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/buttonsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/marginStart"
+                android:layout_marginTop="@dimen/marginTopSub"
+                android:layout_marginEnd="@dimen/marginStart"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:alignContent="flex_start"
+                app:alignItems="flex_start"
+                app:dividerDrawable="@drawable/pictures_divider"
+                app:flexWrap="wrap"
+                app:showDivider="beginning|middle">
+
+                <Button
+                    android:id="@+id/addImageButton"
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="@string/symbolAdd"
+                    android:textColor="@android:color/white"
+                    android:textSize="24sp"
+                    app:cornerRadius="0dp"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <Button
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:backgroundTint="@color/orange"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="0dp" />
+
+
+                <Button
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="0dp"
+                    app:iconPadding="0dp" />
+
+                <Button
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:backgroundTint="@color/orange"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="0dp" />
+
+                <Button
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="0dp" />
+
+                <Button
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:backgroundTint="@color/orange"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="0dp" />
+
+                <Button
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="0dp" />
+
+                <Button
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:backgroundTint="@color/orange"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="0dp" />
+
+                <Button
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="0dp" />
+
+                <Button
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:backgroundTint="@color/orange"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="0dp" />
+
+                <Button
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="0dp" />
+
+                <Button
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:backgroundTint="@color/orange"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="0dp" />
+
+                <Button
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="0dp" />
+
+                <Button
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:backgroundTint="@color/orange"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="0dp" />
+
+                <Button
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="0dp" />
+
+                <Button
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:backgroundTint="@color/orange"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="0dp" />
+
+                <Button
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="0dp" />
+
+                <Button
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:backgroundTint="@color/orange"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="0dp" />
+
+                <Button
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="0dp" />
+
+                <Button
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:backgroundTint="@color/orange"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="0dp" />
+
+                <Button
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="0dp" />
+
+                <Button
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:backgroundTint="@color/orange"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="0dp" />
+
+                <Button
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="0dp" />
+
+                <Button
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:backgroundTint="@color/orange"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="0dp" />
+
+                <Button
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="0dp" />
+
+                <Button
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:backgroundTint="@color/orange"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="0dp" />
+            </com.google.android.flexbox.FlexboxLayout>
+        </LinearLayout>
+    </ScrollView>
+
     <Button
         android:id="@+id/submitReviewBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/submit_review"
+        android:text="@string/submitReview"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/scrollViewImages"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
