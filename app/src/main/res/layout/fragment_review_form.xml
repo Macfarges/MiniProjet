@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".view.fragment.review.form.ReviewFormFragment">
 
     <TextView
         android:id="@+id/restaurantTitle"
@@ -101,7 +103,6 @@
         android:id="@+id/scrollViewImages"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="@dimen/marginStart"
         app:layout_constraintBottom_toTopOf="@id/submitReviewBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -113,12 +114,10 @@
             android:orientation="vertical">
 
             <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/buttonsLayout"
+                android:id="@+id/imagesLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/marginStart"
                 android:layout_marginTop="@dimen/marginTopSub"
-                android:layout_marginEnd="@dimen/marginStart"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 app:alignContent="flex_start"
@@ -134,199 +133,7 @@
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
                     android:text="@string/symbolAdd"
-                    android:textColor="@android:color/white"
-                    android:textSize="24sp"
-                    app:cornerRadius="0dp"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <Button
-                    android:layout_width="@dimen/imgLittleSquareDim"
-                    android:layout_height="@dimen/imgLittleSquareDim"
-                    android:backgroundTint="@color/orange"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:cornerRadius="0dp" />
-
-
-                <Button
-                    android:layout_width="@dimen/imgLittleSquareDim"
-                    android:layout_height="@dimen/imgLittleSquareDim"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:cornerRadius="0dp"
-                    app:iconPadding="0dp" />
-
-                <Button
-                    android:layout_width="@dimen/imgLittleSquareDim"
-                    android:layout_height="@dimen/imgLittleSquareDim"
-                    android:backgroundTint="@color/orange"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:cornerRadius="0dp" />
-
-                <Button
-                    android:layout_width="@dimen/imgLittleSquareDim"
-                    android:layout_height="@dimen/imgLittleSquareDim"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:cornerRadius="0dp" />
-
-                <Button
-                    android:layout_width="@dimen/imgLittleSquareDim"
-                    android:layout_height="@dimen/imgLittleSquareDim"
-                    android:backgroundTint="@color/orange"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:cornerRadius="0dp" />
-
-                <Button
-                    android:layout_width="@dimen/imgLittleSquareDim"
-                    android:layout_height="@dimen/imgLittleSquareDim"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:cornerRadius="0dp" />
-
-                <Button
-                    android:layout_width="@dimen/imgLittleSquareDim"
-                    android:layout_height="@dimen/imgLittleSquareDim"
-                    android:backgroundTint="@color/orange"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:cornerRadius="0dp" />
-
-                <Button
-                    android:layout_width="@dimen/imgLittleSquareDim"
-                    android:layout_height="@dimen/imgLittleSquareDim"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:cornerRadius="0dp" />
-
-                <Button
-                    android:layout_width="@dimen/imgLittleSquareDim"
-                    android:layout_height="@dimen/imgLittleSquareDim"
-                    android:backgroundTint="@color/orange"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:cornerRadius="0dp" />
-
-                <Button
-                    android:layout_width="@dimen/imgLittleSquareDim"
-                    android:layout_height="@dimen/imgLittleSquareDim"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:cornerRadius="0dp" />
-
-                <Button
-                    android:layout_width="@dimen/imgLittleSquareDim"
-                    android:layout_height="@dimen/imgLittleSquareDim"
-                    android:backgroundTint="@color/orange"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:cornerRadius="0dp" />
-
-                <Button
-                    android:layout_width="@dimen/imgLittleSquareDim"
-                    android:layout_height="@dimen/imgLittleSquareDim"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:cornerRadius="0dp" />
-
-                <Button
-                    android:layout_width="@dimen/imgLittleSquareDim"
-                    android:layout_height="@dimen/imgLittleSquareDim"
-                    android:backgroundTint="@color/orange"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:cornerRadius="0dp" />
-
-                <Button
-                    android:layout_width="@dimen/imgLittleSquareDim"
-                    android:layout_height="@dimen/imgLittleSquareDim"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:cornerRadius="0dp" />
-
-                <Button
-                    android:layout_width="@dimen/imgLittleSquareDim"
-                    android:layout_height="@dimen/imgLittleSquareDim"
-                    android:backgroundTint="@color/orange"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:cornerRadius="0dp" />
-
-                <Button
-                    android:layout_width="@dimen/imgLittleSquareDim"
-                    android:layout_height="@dimen/imgLittleSquareDim"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:cornerRadius="0dp" />
-
-                <Button
-                    android:layout_width="@dimen/imgLittleSquareDim"
-                    android:layout_height="@dimen/imgLittleSquareDim"
-                    android:backgroundTint="@color/orange"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:cornerRadius="0dp" />
-
-                <Button
-                    android:layout_width="@dimen/imgLittleSquareDim"
-                    android:layout_height="@dimen/imgLittleSquareDim"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:cornerRadius="0dp" />
-
-                <Button
-                    android:layout_width="@dimen/imgLittleSquareDim"
-                    android:layout_height="@dimen/imgLittleSquareDim"
-                    android:backgroundTint="@color/orange"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:cornerRadius="0dp" />
-
-                <Button
-                    android:layout_width="@dimen/imgLittleSquareDim"
-                    android:layout_height="@dimen/imgLittleSquareDim"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:cornerRadius="0dp" />
-
-                <Button
-                    android:layout_width="@dimen/imgLittleSquareDim"
-                    android:layout_height="@dimen/imgLittleSquareDim"
-                    android:backgroundTint="@color/orange"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:cornerRadius="0dp" />
-
-                <Button
-                    android:layout_width="@dimen/imgLittleSquareDim"
-                    android:layout_height="@dimen/imgLittleSquareDim"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:cornerRadius="0dp" />
-
-                <Button
-                    android:layout_width="@dimen/imgLittleSquareDim"
-                    android:layout_height="@dimen/imgLittleSquareDim"
-                    android:backgroundTint="@color/orange"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:cornerRadius="0dp" />
-
-                <Button
-                    android:layout_width="@dimen/imgLittleSquareDim"
-                    android:layout_height="@dimen/imgLittleSquareDim"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:cornerRadius="0dp" />
-
-                <Button
-                    android:layout_width="@dimen/imgLittleSquareDim"
-                    android:layout_height="@dimen/imgLittleSquareDim"
-                    android:backgroundTint="@color/orange"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
+                    android:textSize="54sp"
                     app:cornerRadius="0dp" />
             </com.google.android.flexbox.FlexboxLayout>
         </LinearLayout>
