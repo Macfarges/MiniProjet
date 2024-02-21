@@ -14,7 +14,7 @@
         android:layout_marginTop="@dimen/marginTop"
         android:autoSizeTextType="uniform"
         android:gravity="center"
-        android:text="Titre"
+        android:text="@string/templateRestaurantName"
         android:textSize="@dimen/h1Size"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,28 +27,41 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/marginTop"
         android:gravity="center"
-        android:text="Body"
+        android:text="@string/templateBody"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/restaurantName" />
 
-    <Button
-        android:id="@+id/leaveReviewBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/review"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.15"
-        app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/reserveBtn"
-        android:layout_width="wrap_content"
+    <com.google.android.flexbox.FlexboxLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/reserve"
+        android:layout_margin="@dimen/marginBottomActions"
+        app:justifyContent="space_between"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.85"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/restaurantBody"
+        app:layout_constraintVertical_bias="1.0">
+
+        <Button
+            android:id="@+id/leaveReviewBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/review"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="ButtonStyle" />
+
+        <Button
+            android:id="@+id/reserveBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reserve"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="ButtonStyle" />
+    </com.google.android.flexbox.FlexboxLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

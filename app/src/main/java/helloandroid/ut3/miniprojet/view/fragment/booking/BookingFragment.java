@@ -62,20 +62,18 @@ public class BookingFragment extends Fragment {
                     Integer.parseInt(nbPersonnes.getText().toString()),
                     this.restaurant.getTitle()
             );
-            Toast.makeText(requireContext(), "Attempting...", Toast.LENGTH_SHORT).show();
 
-            FirebaseManager.getInstance().addBooking(result, new FirebaseManager.OnItemAddListener() {
+            FirebaseManager.getInstance().addBooking(result, new FirebaseManager.DataCallback<Booking>() {
                 @Override
-                public void onSuccess() {
-                    // Handle success
-                    //Back button faking instead?
+                public void onSuccess(Booking booking) {
+                    Toast.makeText(requireContext(), "Réservation réussie", Toast.LENGTH_SHORT).show();
                     getParentFragmentManager().popBackStack();
                 }
 
                 @Override
-                public void onError(String errorMessage) {
+                public void onError(Exception e) {
                     // Handle error
-                    Toast.makeText(requireContext(), "Failed to submit booking", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Echec de réservation : une erreur inattendue est survenue", Toast.LENGTH_SHORT).show();
 
                 }
             });

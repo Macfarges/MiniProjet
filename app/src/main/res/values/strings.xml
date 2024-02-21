@@ -8,6 +8,7 @@
     <string name="enterYourReview">Entrez votre avis…</string>
     <string name="submitReview">Ajouter cet avis</string>
     <string name="templateRestaurantName">Restaurant Name</string>
+    <string name="templateBody">Body</string>
     <string name="symbolAdd">+</string>
     <string name="selectedImage">Image selectionnée</string>
     <string name="chooseImage">Choisir une image</string>
