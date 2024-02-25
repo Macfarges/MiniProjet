@@ -19,46 +19,96 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <ImageView
-        android:id="@+id/pictureView"
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/contentPicture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/marginTop"
-        android:contentDescription="@string/selectedImage"
+        app:justifyContent="center"
+        app:layout_constraintBottom_toTopOf="@+id/bottomButtons"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/addPictureTitle" />
+        app:layout_constraintTop_toBottomOf="@id/addPictureTitle"
+        app:layout_constraintVertical_bias="0.44">
 
-    <LinearLayout
+        <ImageView
+            android:id="@+id/pictureView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/marginTop"
+            android:contentDescription="@string/selectedImage"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/choosePictureButtons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_border"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/selectPicture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="#00FFFFFF"
+                android:drawableTop="@drawable/baseline_folder_64"
+                android:drawableTint="?attr/colorPrimary"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:paddingVertical="12dp"
+                android:text="@string/storedPicture"
+                android:textColor="?attr/colorPrimary"
+                app:cornerRadius="0dp"
+                tools:ignore="ButtonStyle" />
+
+            <View
+                android:layout_width="5dp"
+                android:layout_height="match_parent"
+                android:background="?attr/colorPrimary" />
+
+            <Button
+                android:id="@+id/takePicture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="#00FFFFFF"
+                android:drawableTop="@drawable/baseline_photo_camera_64"
+                android:drawableTint="?attr/colorPrimary"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:paddingVertical="12dp"
+                android:text="@string/camera"
+                android:textColor="?attr/colorPrimary"
+                app:cornerRadius="0dp"
+                tools:ignore="ButtonStyle">
+
+            </Button>
+        </LinearLayout>
+
+    </com.google.android.flexbox.FlexboxLayout>
+
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/bottomButtons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/marginBottomActions"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
+        app:justifyContent="space_between"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pictureView"
         app:layout_constraintVertical_bias="1.0">
 
-        <Button
-            android:id="@+id/selectPicture"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/chooseImage"
-            tools:ignore="ButtonStyle" />
 
         <Button
-            android:id="@+id/returnPicture"
-            android:layout_width="0dp"
+            android:id="@+id/addPicture"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:enabled="false"
-            android:text="@string/ok"
+            android:text="@string/add"
             tools:ignore="ButtonStyle" />
-    </LinearLayout>
+    </com.google.android.flexbox.FlexboxLayout>
 
-
+    <!--TODO ajouter option prendre une photo (voir sujet) -->
 </androidx.constraintlayout.widget.ConstraintLayout>

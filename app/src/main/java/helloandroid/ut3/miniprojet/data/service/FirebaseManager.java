@@ -41,17 +41,21 @@ public class FirebaseManager {
         }
     }
 
-    public void addReview(Review review) {
-        getReviewsRef().child(review.getId()).setValue(review);
+    public void addReview(Review review, final DataCallback<Review> listener) {
+        getReviewsRef().child(review.getId()).setValue(review, (databaseError, databaseReference) -> {
+            if (databaseError == null) {
+                listener.onSuccess(review);
+            } else {
+                listener.onError(databaseError.toException());
+            }
+        });
     }
 
     public void addBooking(Booking booking, final DataCallback<Booking> listener) {
         getReservationsRef().child(booking.getId()).setValue(booking, (databaseError, databaseReference) -> {
             if (databaseError == null) {
-                // Review added successfully
                 listener.onSuccess(booking);
             } else {
-                // Error occurred while adding the review
                 listener.onError(databaseError.toException());
             }
         });

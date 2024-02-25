@@ -40,7 +40,6 @@ public class RestaurantFragment extends Fragment {
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();
-
         final View.OnClickListener reserveAction = v -> {
             getParentFragmentManager().beginTransaction()
                     .replace(R.id.fragmentContainerView, new BookingFragment(this.restaurant), null)
@@ -48,7 +47,7 @@ public class RestaurantFragment extends Fragment {
                     .addToBackStack(null)
                     .commit();
         };
-        View view = inflater.inflate(R.layout.restaurant_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_restaurant, container, false);
         ((TextView) view.findViewById(R.id.restaurantName)).setText(restaurant.getTitle());
         ((TextView) view.findViewById(R.id.restaurantBody)).setText(Html.fromHtml(restaurant.getInfos().replaceAll("<img[^>]*>", ""), Html.FROM_HTML_MODE_LEGACY));
         view.findViewById(R.id.leaveReviewBtn).setOnClickListener(leaveReviewAction);

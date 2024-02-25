@@ -25,15 +25,20 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 
 import helloandroid.ut3.miniprojet.R;
 import helloandroid.ut3.miniprojet.data.domain.Restaurant;
+import helloandroid.ut3.miniprojet.data.domain.Review;
+import helloandroid.ut3.miniprojet.data.service.FirebaseManager;
 import helloandroid.ut3.miniprojet.view.fragment.picture.PictureFormFragment;
+import helloandroid.ut3.utils.FileUtils;
 
 public class ReviewFormFragment extends Fragment {
     private final Restaurant restaurant;
     private final List<ImageButton> pictures = new ArrayList<>();
-    private TextView reviewEditText;
+    private final List<Uri> pictureURIs = new ArrayList<>();
+    private final String genericErrorMessage = "Echec de l'ajout de votre avis";
     private TextView picturesTv;
     private StorageReference storageReference;
     private FlexboxLayout picturesLayout;
@@ -53,20 +58,22 @@ public class ReviewFormFragment extends Fragment {
         storageReference = FirebaseStorage.getInstance().getReference();
         progressIndicator = view.findViewById(R.id.progressIndicator);
         ((TextView) view.findViewById(R.id.restaurantTitle)).setText(restaurant.getTitle());
-        view.findViewById(R.id.addPictureBtn).setOnClickListener(v -> getParentFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainerView, new PictureFormFragment(), null)
-                .setReorderingAllowed(true)
-                .addToBackStack("pictureForm")
-                .commit());
+        view.findViewById(R.id.addPictureBtn).setOnClickListener(v ->
+                getParentFragmentManager().beginTransaction()
+                        .replace(R.id.fragmentContainerView, new PictureFormFragment(), null)
+                        .setReorderingAllowed(true)
+                        .addToBackStack("pictureForm")
+                        .commit()
+        );
         getParentFragmentManager().setFragmentResultListener("newPictureBundle", this, (requestKey, result) -> {
             String newPictureURI = result.getString("newPictureURI");
             if (newPictureURI == null)
                 return;
+            pictureURIs.add(Uri.parse(newPictureURI));
             pictures.add(pushNewPictureToLayout(Uri.parse(newPictureURI)));
+            updatePicturesCount(pictures.size());
         });
-        reviewEditText = view.findViewById(R.id.reviewEditText);
         picturesTv = view.findViewById(R.id.picturesTv);
-        reviewEditText.setText(savedInstanceState != null ? savedInstanceState.getCharSequence("reviewEditTextText") : "");
         stars = new ArrayList<>();
         stars.add(view.findViewById(R.id.star1));
         stars.add(view.findViewById(R.id.star2));
@@ -78,12 +85,11 @@ public class ReviewFormFragment extends Fragment {
             star.setOnClickListener(v -> onStarClick(star));
         }
         picturesLayout = view.findViewById(R.id.picturesLayout);
-        for (ImageButton picture : pictures) {
-//            picturesLayout.removeView(picture); for the ondestroy or try listview todo
-            picturesLayout.addView(picture);
+        for (ImageButton pictureBtn : pictures) {
+            picturesLayout.addView(pictureBtn);
         }
         updatePicturesCount(pictures.size());
-        view.findViewById(R.id.submitReviewBtn).setOnClickListener(v -> onSubmitClick());
+        view.findViewById(R.id.submitReviewBtn).setOnClickListener(v -> onSubmitClick(view));
         return view;
     }
 
@@ -103,8 +109,29 @@ public class ReviewFormFragment extends Fragment {
         }
     }
 
-    private void onSubmitClick() {
-        Toast.makeText(requireContext(), "Review submitted with rating: " + rating, Toast.LENGTH_SHORT).show();
+    private void onSubmitClick(View view) {
+        FirebaseManager.getInstance().addReview(
+                new Review(
+                        ((TextView) view.findViewById(R.id.reviewEditText)).getText().toString(),
+                        ((TextView) view.findViewById(R.id.sourceEditText)).getText().toString(),
+                        rating,
+                        pushPictures(),
+                        restaurant.getId()
+                )
+                , new FirebaseManager.DataCallback<Review>() {
+                    @Override
+                    public void onSuccess(Review review) {
+                        Toast.makeText(requireContext(), "Votre avis a été envoyé !", Toast.LENGTH_SHORT).show();
+                        getParentFragmentManager().popBackStack();
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        // Handle error
+                        Toast.makeText(requireContext(), genericErrorMessage, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
     }
 
     public void updatePicturesCount(int count) {
@@ -129,19 +156,36 @@ public class ReviewFormFragment extends Fragment {
         return pictureBtn;
     }
 
-    private void pushPictures() {
-        String filePath = "reviews/pictures/" + UUID.randomUUID().toString();
-        StorageReference ref = storageReference.child(filePath);
-        for (ImageButton picture : pictures) {
-            ref.putFile((Uri) picture.getTag())
+    private List<String> pushPictures() {
+        List<String> pictureURLs = new ArrayList<>();
+        long totalBytes = 0;
+        AtomicLong currentUploadedBytes = new AtomicLong();
+        for (Uri pictureURI : pictureURIs) {
+            totalBytes += FileUtils.getFileSizeFromUri(requireContext(), pictureURI);
+        }
+        progressIndicator.setMax(Math.toIntExact(totalBytes));
+        for (Uri pictureURI : pictureURIs) {
+            String imagePath = String.format("reviews/%s/pictures/%s", restaurant.getId(), UUID.randomUUID().toString());
+            pictureURLs.add(imagePath);
+            storageReference.child(imagePath).putFile(pictureURI)
                     .addOnSuccessListener(taskSnapshot -> {
-
                     })
-                    .addOnFailureListener(e -> Toast.makeText(requireContext(), "Failed!" + e.getMessage(), Toast.LENGTH_SHORT).show())
+                    .addOnFailureListener(e -> Toast.makeText(requireContext(), genericErrorMessage,
+                            Toast.LENGTH_SHORT).show()
+                    )
                     .addOnProgressListener(taskSnapshot -> {
-                        progressIndicator.setMax(Math.toIntExact(taskSnapshot.getTotalByteCount()));
-                        progressIndicator.setProgress(Math.toIntExact(taskSnapshot.getBytesTransferred()));
+                        currentUploadedBytes.addAndGet(taskSnapshot.getBytesTransferred());
+                        progressIndicator.setProgress(Math.toIntExact(currentUploadedBytes.get()));
                     });
+        }
+        return pictureURLs;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        for (ImageButton pictureBtn : pictures) {
+            picturesLayout.removeView(pictureBtn);
         }
     }
 }

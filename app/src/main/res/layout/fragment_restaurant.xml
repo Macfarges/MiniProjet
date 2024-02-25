@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".view.fragment.restaurant.RestaurantFragment">
 
-
     <TextView
         android:id="@+id/restaurantName"
         android:layout_width="wrap_content"

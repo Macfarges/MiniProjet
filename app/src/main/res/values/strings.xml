@@ -12,7 +12,16 @@
     <string name="symbolAdd">+</string>
     <string name="selectedImage">Image selectionnée</string>
     <string name="chooseImage">Choisir une image</string>
+    <string name="add">Ajouter</string>
     <string name="ok">OK</string>
     <string name="validate">Valider</string>
     <string name="addPictureTitle">Ajouter une photo</string>
+    <string name="nbPersons">Nombre de personnes</string>
+    <string name="noun">Midi</string>
+    <string name="evening">Soir</string>
+    <string name="templateTitle">Titre</string>
+    <string name="_1">1</string>
+    <string name="enterYourName">Entrez votre nom…</string>
+    <string name="camera">Appareil photo</string>
+    <string name="storedPicture">Photo existante</string>
 </resources>

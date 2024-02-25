@@ -7,8 +7,9 @@ import java.util.UUID;
 public class Review {
     private String id;
     private String text;
+    private String source;
     private int rating;
-    private List<String> pictureUrls; // todo: maybe change to a list of Picture objects
+    private List<String> pictureUrls;
     private Date date;
     private String restaurantId;
 
@@ -16,11 +17,12 @@ public class Review {
         // Default constructor required for calls to DataSnapshot.getValue(Review.class)
     }
 
-    public Review(String text, int rating, List<String> pictureUrls, String restaurantId) {
+    public Review(String text, String source, int rating, List<String> pictureUrls, String restaurantId) {
         if (rating < 0 || rating > 5)
             throw new IllegalArgumentException("Rating must be between 0 and 5");
         this.id = UUID.randomUUID().toString();
         this.text = text;
+        this.source = source;
         this.rating = rating;
         this.pictureUrls = pictureUrls;
         this.restaurantId = restaurantId;
@@ -34,6 +36,10 @@ public class Review {
 
     public String getText() {
         return text;
+    }
+
+    public String getSource() {
+        return source;
     }
 
     public int getRating() {

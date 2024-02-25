@@ -39,7 +39,7 @@ public class BookingFragment extends Fragment {
         sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                ((TextView) view.findViewById(R.id.nbPersonnes)).setText(String.valueOf(i));
+                ((TextView) view.findViewById(R.id.nbPersons)).setText(String.valueOf(i));
             }
 
             @Override
@@ -51,19 +51,14 @@ public class BookingFragment extends Fragment {
             }
         });
 
-        CalendarView calendarView = view.findViewById(R.id.calendarView);
-        Date selectedDate = new Date(calendarView.getDate());
-        RadioButton midi = view.findViewById(R.id.radioButton);
-        TextView nbPersonnes = view.findViewById(R.id.nbPersonnes);
+        Date selectedDate = new Date(((CalendarView) view.findViewById(R.id.calendarView)).getDate());
         final View.OnClickListener bookingSend = v -> {
-            Booking result = new Booking(
+            FirebaseManager.getInstance().addBooking(new Booking(
                     selectedDate,
-                    midi.isChecked(),
-                    Integer.parseInt(nbPersonnes.getText().toString()),
+                    ((RadioButton) view.findViewById(R.id.radioButton)).isChecked(),
+                    Integer.parseInt(((TextView) view.findViewById(R.id.nbPersons)).getText().toString()),
                     this.restaurant.getTitle()
-            );
-
-            FirebaseManager.getInstance().addBooking(result, new FirebaseManager.DataCallback<Booking>() {
+            ), new FirebaseManager.DataCallback<Booking>() {
                 @Override
                 public void onSuccess(Booking booking) {
                     Toast.makeText(requireContext(), "Réservation réussie", Toast.LENGTH_SHORT).show();
@@ -74,7 +69,6 @@ public class BookingFragment extends Fragment {
                 public void onError(Exception e) {
                     // Handle error
                     Toast.makeText(requireContext(), "Echec de réservation : une erreur inattendue est survenue", Toast.LENGTH_SHORT).show();
-
                 }
             });
         };
