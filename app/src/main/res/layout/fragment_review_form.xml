@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.fragment.review.form.ReviewFormFragment">
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progressIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/restaurantTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/marginTop"
+        android:gravity="center"
+        android:text="@string/templateRestaurantName"
+        android:textSize="@dimen/h1Size"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progressIndicator" />
+
+    <EditText
+        android:id="@+id/sourceEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/marginTop"
+        android:autofillHints="reviewString"
+        android:focusedByDefault="true"
+        android:gravity="top"
+        android:hint="@string/enterYourName"
+        android:inputType="textMultiLine"
+        android:lines="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/restaurantTitle" />
+
+    <LinearLayout
+        android:id="@+id/ratingLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/marginTop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sourceEditText">
+
+        <ImageView
+            android:id="@+id/star1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/star"
+            android:src="@drawable/ic_star_filled_34"
+            android:tag="1" />
+
+        <ImageView
+            android:id="@+id/star2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/star"
+            android:src="@drawable/ic_star_filled_34"
+            android:tag="2" />
+
+        <ImageView
+            android:id="@+id/star3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/star"
+            android:src="@drawable/ic_star_filled_34"
+            android:tag="3" />
+
+        <ImageView
+            android:id="@+id/star4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/star"
+            android:src="@drawable/ic_star_filled_34"
+            android:tag="4" />
+
+        <ImageView
+            android:id="@+id/star5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/star"
+            android:src="@drawable/ic_star_filled_34"
+            android:tag="5" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/reviewEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/marginTop"
+        android:autofillHints="reviewString"
+        android:gravity="top"
+        android:hint="@string/enterYourReview"
+        android:inputType="textMultiLine"
+        android:lines="6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ratingLayout" />
+
+
+    <TextView
+        android:id="@+id/picturesTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/marginStart"
+        android:layout_marginTop="@dimen/marginTop"
+        android:text="@string/picturesLabel"
+        app:layout_constraintBottom_toTopOf="@id/scrollViewPictures"
+        app:layout_constraintTop_toBottomOf="@id/reviewEditText" />
+
+    <ScrollView
+        android:id="@+id/scrollViewPictures"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/submitReviewBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/picturesTv">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/picturesLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginTopSub"
+                app:alignContent="flex_start"
+                app:alignItems="flex_start"
+                app:dividerDrawable="@drawable/pictures_divider"
+                app:flexWrap="wrap"
+                app:showDivider="beginning|middle">
+
+                <Button
+                    android:id="@+id/addPictureBtn"
+                    android:layout_width="@dimen/imgLittleSquareDim"
+                    android:layout_height="@dimen/imgLittleSquareDim"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="@string/symbolAdd"
+                    android:textSize="54sp"
+                    app:cornerRadius="0dp" />
+            </com.google.android.flexbox.FlexboxLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/submitReviewBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/marginBottomActions"
+        android:text="@string/submitReview"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/scrollViewPictures"
+        app:layout_constraintVertical_bias="1.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

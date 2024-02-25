@@ -14,6 +14,10 @@ public class Restaurant {
 
     private String crousAndGoSrc;
 
+    protected Restaurant() {
+        // Default constructor required for calls to DataSnapshot.getValue(Restaurant.class)
+    }
+
     // Constructor
     public Restaurant(String id, String title, String openingHours, String closingTime,
                       String shortDesc, String lat, String lon, String zone,
@@ -79,18 +83,6 @@ public class Restaurant {
     // Override toString for easy printing
     @Override
     public String toString() {
-        return "Restaurant{" +
-                "id='" + id + '\'' +
-                ", title='" + title + '\'' +
-                ", openingHours='" + openingHours + '\'' +
-                ", closingTime='" + closingTime + '\'' +
-                ", shortDesc='" + shortDesc + '\'' +
-                ", lat='" + lat + '\'' +
-                ", lon='" + lon + '\'' +
-                ", zone='" + zone + '\'' +
-                ", infos='" + infos + '\'' +
-                ", contact='" + contact + '\'' +
-                ", crousAndGoSrc='" + crousAndGoSrc + '\'' +
-                '}';
+        return title;
     }
 }

@@ -1,3 +1,27 @@
 <resources>
-    <string name="app_name">MiniProjet</string>
+    <string name="reserve">Réserver</string>
+    <string name="review">Laisser un avis</string>
+    <string name="fabMap">Ouvrir la carte</string>
+    <string name="appName">Mini projet</string>
+    <string name="star">Etoile</string>
+    <string name="picturesLabel">Photos (%d)</string>
+    <string name="enterYourReview">Entrez votre avis…</string>
+    <string name="submitReview">Ajouter cet avis</string>
+    <string name="templateRestaurantName">Restaurant Name</string>
+    <string name="templateBody">Body</string>
+    <string name="symbolAdd">+</string>
+    <string name="selectedImage">Image selectionnée</string>
+    <string name="chooseImage">Choisir une image</string>
+    <string name="add">Ajouter</string>
+    <string name="ok">OK</string>
+    <string name="validate">Valider</string>
+    <string name="addPictureTitle">Ajouter une photo</string>
+    <string name="nbPersons">Nombre de personnes</string>
+    <string name="noun">Midi</string>
+    <string name="evening">Soir</string>
+    <string name="templateTitle">Titre</string>
+    <string name="_1">1</string>
+    <string name="enterYourName">Entrez votre nom…</string>
+    <string name="camera">Appareil photo</string>
+    <string name="storedPicture">Photo existante</string>
 </resources>
