@@ -2,6 +2,7 @@
 <resources>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="marginTop">20dp</dimen>
+    <dimen name="marginBottomActions">10dp</dimen>
     <dimen name="marginTopSub">12dp</dimen>
     <dimen name="h1Size">24sp</dimen>
     <dimen name="marginStart">5sp</dimen>

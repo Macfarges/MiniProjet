@@ -11,20 +11,20 @@ public class Booking {
 
     private boolean isMidi;
 
-    private int nbPersonnes;
+    private int nbPersons;
 
     protected Booking() {
     }
 
 
-    public Booking(Date date, boolean isMidi, int nbPersonnes, String restaurantName) {
-        if (nbPersonnes < 1 || nbPersonnes > 10) {
+    public Booking(Date date, boolean isMidi, int nbPersons, String restaurantName) {
+        if (nbPersons < 1 || nbPersons > 10) {
             throw new IllegalArgumentException("Number of person must be between 1 and 10");
         }
         this.id = UUID.randomUUID().toString();
         this.date = date;
         this.isMidi = isMidi;
-        this.nbPersonnes = nbPersonnes;
+        this.nbPersons = nbPersons;
         this.restaurantName = restaurantName;
     }
 
@@ -44,7 +44,7 @@ public class Booking {
         return isMidi;
     }
 
-    public int getNbPersonnes() {
-        return nbPersonnes;
+    public int getNbPersons() {
+        return nbPersons;
     }
 }

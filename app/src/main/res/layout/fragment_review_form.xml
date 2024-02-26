@@ -29,28 +29,28 @@
         app:layout_constraintTop_toBottomOf="@id/progressIndicator" />
 
     <EditText
-        android:id="@+id/reviewEditText"
+        android:id="@+id/sourceEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/marginTop"
         android:autofillHints="reviewString"
+        android:focusedByDefault="true"
         android:gravity="top"
-        android:hint="@string/enterYourReview"
+        android:hint="@string/enterYourName"
         android:inputType="textMultiLine"
-        android:lines="6"
+        android:lines="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/restaurantTitle" />
 
     <LinearLayout
-        android:id="@+id/rating_layout"
+        android:id="@+id/ratingLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/marginTop"
-        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/reviewEditText">
+        app:layout_constraintTop_toBottomOf="@id/sourceEditText">
 
         <ImageView
             android:id="@+id/star1"
@@ -98,6 +98,21 @@
             android:tag="5" />
     </LinearLayout>
 
+    <EditText
+        android:id="@+id/reviewEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/marginTop"
+        android:autofillHints="reviewString"
+        android:gravity="top"
+        android:hint="@string/enterYourReview"
+        android:inputType="textMultiLine"
+        android:lines="6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ratingLayout" />
+
+
     <TextView
         android:id="@+id/picturesTv"
         android:layout_width="match_parent"
@@ -106,7 +121,7 @@
         android:layout_marginTop="@dimen/marginTop"
         android:text="@string/picturesLabel"
         app:layout_constraintBottom_toTopOf="@id/scrollViewPictures"
-        app:layout_constraintTop_toBottomOf="@id/rating_layout" />
+        app:layout_constraintTop_toBottomOf="@id/reviewEditText" />
 
     <ScrollView
         android:id="@+id/scrollViewPictures"
@@ -127,8 +142,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginTopSub"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
                 app:alignContent="flex_start"
                 app:alignItems="flex_start"
                 app:dividerDrawable="@drawable/pictures_divider"
@@ -152,6 +165,7 @@
         android:id="@+id/submitReviewBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/marginBottomActions"
         android:text="@string/submitReview"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
