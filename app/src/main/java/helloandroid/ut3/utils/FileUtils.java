@@ -4,9 +4,14 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.widget.ImageView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -57,4 +62,72 @@ public class FileUtils {
 
         return null;
     }
+
+    //Source : https://xjaphx.wordpress.com/learning/tutorials/
+    public static Bitmap applyDankFilter(Bitmap source, float effectLevel) {
+        Bitmap resultBitmap = Bitmap.createBitmap(source.getWidth(), source.getHeight(), Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(resultBitmap);
+        Paint paint = new Paint();
+
+        ColorMatrix colorMatrix = new ColorMatrix();
+
+        // Adjust saturation
+        colorMatrix.setSaturation(effectLevel);
+
+        // Adjust contrast
+        colorMatrix.set(new float[]{
+                2f, 0f, 0f, 0f, 0f,
+                0f, 2f, 0f, 0f, 0f,
+                0f, 0f, 2f, 0f, 0f,
+                0f, 0f, 0f, 1f, 0f
+        });
+
+        // Adjust brightness
+        colorMatrix.postConcat(new ColorMatrix(new float[]{
+                1f, 0f, 0f, 0f, effectLevel,
+                0f, 1f, 0f, 0f, effectLevel,
+                0f, 0f, 1f, 0f, effectLevel,
+                0f, 0f, 0f, 1f, 0f
+        }));
+
+        paint.setColorFilter(new ColorMatrixColorFilter(colorMatrix));
+        canvas.drawBitmap(source, 0, 0, paint);
+
+        return resultBitmap;
+    }
+
+    public static Bitmap applyRandomColorFilter(Bitmap source, float intensity) {
+        Bitmap resultBitmap = Bitmap.createBitmap(source.getWidth(), source.getHeight(), Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(resultBitmap);
+        Paint paint = new Paint();
+
+        ColorMatrix colorMatrix = new ColorMatrix();
+        colorMatrix.set(new float[]{
+                0.393f + 0.607f * intensity, 0.769f - 0.769f * intensity, 0.189f - 0.189f * intensity, 0, 0,
+                0.349f - 0.349f * intensity, 0.686f + 0.314f * intensity, 0.168f - 0.168f * intensity, 0, 0,
+                0.272f - 0.272f * intensity, 0.534f - 0.534f * intensity, 0.131f + 0.869f * intensity, 0, 0,
+                0, 0, 0, 1, 0
+        });
+
+        ColorMatrixColorFilter colorFilter = new ColorMatrixColorFilter(colorMatrix);
+        paint.setColorFilter(colorFilter);
+        canvas.drawBitmap(source, 0, 0, paint);
+
+        return resultBitmap;
+    }
+
+    public static Bitmap getBitmapFromImageView(ImageView imageView) {
+        Bitmap bitmap = Bitmap.createBitmap(
+                imageView.getWidth(),
+                imageView.getHeight(),
+                Bitmap.Config.ARGB_8888
+        );
+        Canvas canvas = new Canvas(bitmap);
+        imageView.draw(canvas);
+        return bitmap;
+    }
+
 }
+

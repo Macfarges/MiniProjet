@@ -24,4 +24,6 @@
     <string name="enterYourName">Entrez votre nom…</string>
     <string name="camera">Appareil photo</string>
     <string name="storedPicture">Photo existante</string>
+    <string name="filtre_1">Filtre 1</string>
+    <string name="filtre_2">Filtre 2</string>
 </resources>

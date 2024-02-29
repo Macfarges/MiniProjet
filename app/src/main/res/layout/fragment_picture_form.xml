@@ -39,7 +39,7 @@
             android:visibility="gone" />
 
         <LinearLayout
-            android:id="@+id/choosePictureButtons"
+            android:id="@+id/choosePictureLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/button_border"
@@ -88,6 +88,31 @@
 
     </com.google.android.flexbox.FlexboxLayout>
 
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/filterLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:justifyContent="space_around"
+        app:layout_constraintBottom_toTopOf="@+id/bottomButtons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contentPicture">
+
+        <Button
+            android:id="@+id/filter1Btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/filtre_1"
+            tools:ignore="ButtonStyle" />
+
+        <Button
+            android:id="@+id/filter2Btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/filtre_2"
+            tools:ignore="ButtonStyle" />
+    </com.google.android.flexbox.FlexboxLayout>
 
     <com.google.android.flexbox.FlexboxLayout
         android:id="@+id/bottomButtons"
