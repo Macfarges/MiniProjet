@@ -80,7 +80,7 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
     public PictureFormFragment() {
         //todo should have an uri as parameter for edition
     }
-
+//TODO : Fix bugs (if we want)
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -189,6 +189,10 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
     private void addPictureBtn() {
         Bitmap bitmap = FileUtils.getBitmapFromImageView(pictureView);
         pictureUri = FileUtils.saveBitmapToFile(requireContext(), bitmap);
+        previousPicture1 = null;
+        currentPicture1 = null;
+        previousPicture2 = null;
+        currentPicture2 = null;
         returnImageUri();
     }
 
@@ -202,7 +206,8 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //MicrophoneUtils.stopRecording();
+        MicrophoneUtils.stopRecording(() -> {
+        });
         AccelerometerUtils.stopAccelerometer();
     }
 
