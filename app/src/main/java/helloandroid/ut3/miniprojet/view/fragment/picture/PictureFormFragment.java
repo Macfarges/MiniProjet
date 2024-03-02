@@ -206,8 +206,6 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
     @Override
     public void onDestroy() {
         super.onDestroy();
-        MicrophoneUtils.stopRecording(() -> {
-        });
         AccelerometerUtils.stopAccelerometer();
     }
 
