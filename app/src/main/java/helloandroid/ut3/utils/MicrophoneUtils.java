@@ -32,7 +32,7 @@ public class MicrophoneUtils {
                 if (bytesRead > 0) {
                     float volumeLevel = FileUtils.calculateVolumeLevel(audioBuffer, bytesRead);
                     if (microphoneCallback != null) {
-                        microphoneCallback.onVolumeLevelChanged(volumeLevel);
+                        microphoneCallback.onVolumeLevelChanged(volumeLevel / 42);
                     }
                 }
 
@@ -81,7 +81,7 @@ public class MicrophoneUtils {
             if (callback != null) {
                 callback.onRecordingStopped();
             }
-        }, 100); // Adjust the delay time as needed
+        }, 10); // Adjust the delay time as needed
     }
 
     public interface StopRecordingCallback {
