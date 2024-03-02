@@ -2,11 +2,15 @@ package helloandroid.ut3.miniprojet.view.fragment.picture;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +28,18 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import helloandroid.ut3.miniprojet.R;
+import helloandroid.ut3.utils.AccelerometerUtils;
 import helloandroid.ut3.utils.FileUtils;
+import helloandroid.ut3.utils.MicrophoneUtils;
+import helloandroid.ut3.utils.PictureFiltersUtils;
 
-public class PictureFormFragment extends Fragment {
+public class PictureFormFragment extends Fragment implements MicrophoneUtils.MicrophoneCallback, AccelerometerUtils.AccelerometerCallback {
+    private static final Handler mainHandler = new Handler(Looper.getMainLooper()); // Create handler associated with the main thread
+    static Uri pictureUri;
+    private final Handler accHandler = new Handler();
+    private final Handler micHandler = new Handler();
+    private final Handler backgroundHandler = new Handler(Looper.getMainLooper()); // Create handler associated with the main thread
     StorageReference storageReference;
-    Uri pictureUri;
     ViewGroup choosePictureLayout, filtersLayout;
     Button addPictureBtn, selectPictureBtn, takePictureBtn, filter1Btn, filter2Btn;
     ImageView pictureView;
@@ -60,12 +71,13 @@ public class PictureFormFragment extends Fragment {
             }
         }
     });
-    boolean isOnFilter1, isOnFilter2;
+    private int filterState = 0; // 0: No filter, 1: Filter 1 applied, 2: Filter 2 applied
 
 
     public PictureFormFragment() {
         //todo should have an uri as parameter for edition
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,6 +92,7 @@ public class PictureFormFragment extends Fragment {
         selectPictureBtn = view.findViewById(R.id.selectPicture);
         takePictureBtn = view.findViewById(R.id.takePicture);
         addPictureBtn = view.findViewById(R.id.addPicture);
+
         selectPictureBtn.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setType("image/*");
@@ -89,50 +102,57 @@ public class PictureFormFragment extends Fragment {
             Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
             activityResultLauncher.launch(intent);
         });
-        //TODO : Clic1 > Prise en compte de microphone + changement visuel
-        //TODO : Clic2 > Confirmation visuel
-        //TODO : Clic 3 > Annulation filtre (puis prochain click = Clic 1)
         filter1Btn.setOnClickListener(v -> {
-            if (!isOnFilter1) {
-                pictureView.setImageBitmap(
-                        FileUtils.applyDankFilter(
-                                FileUtils.getBitmapFromImageView(pictureView),
-                                10F)
-                );
-                filter1Btn.setBackgroundColor(Color.RED);
-            } else {
-                Glide.with(requireContext()).load(pictureUri).into(pictureView);
-                if (isOnFilter2) {
-                    pictureView.setImageBitmap(
-                            FileUtils.applyRandomColorFilter(
-                                    FileUtils.getBitmapFromImageView(pictureView),
-                                    10F)
-                    );
-                }
-                filter1Btn.setBackgroundColor(androidx.appcompat.R.attr.colorPrimary);
+            switch (filterState) {
+                case 0:
+                    // Apply Filter 1
+                    filter1Btn.setBackgroundColor(Color.RED);
+                    MicrophoneUtils.setMicrophoneCallback(this);
+                    MicrophoneUtils.startRecording(requireContext(), requireActivity());
+                    filterState = 1;
+                    break;
+
+                case 1:
+                    // Return the last filter
+                    MicrophoneUtils.stopRecording(() -> {
+                        filter1Btn.setBackgroundColor(androidx.appcompat.R.attr.colorPrimary);
+                        filterState = 2;
+                    });
+                    break;
+
+                case 2:
+                    // Remove the filter and show the original image
+                    Glide.with(requireContext())
+                            .load(pictureUri)
+                            .into(pictureView);
+                    filterState = 0;
+                    break;
             }
-            isOnFilter1 = !isOnFilter1;
         });
+
         filter2Btn.setOnClickListener(v -> {
-            if (!isOnFilter2) {
-                pictureView.setImageBitmap(
-                        FileUtils.applyRandomColorFilter(
-                                FileUtils.getBitmapFromImageView(pictureView),
-                                10F)
-                );
-                filter2Btn.setBackgroundColor(Color.RED);
-            } else {
-                Glide.with(requireContext()).load(pictureUri).into(pictureView);
-                if (isOnFilter1) {
-                    pictureView.setImageBitmap(
-                            FileUtils.applyDankFilter(
-                                    FileUtils.getBitmapFromImageView(pictureView),
-                                    10F)
-                    );
-                }
-                filter2Btn.setBackgroundColor(androidx.appcompat.R.attr.colorPrimary);
+            switch (filterState) {
+                case 0:
+                    // Apply Filter 2 based on accelerometer data
+                    filter2Btn.setBackgroundColor(Color.RED);
+                    AccelerometerUtils.setAccelerometerCallback(this);
+                    AccelerometerUtils.startAccelerometer(requireContext());
+                    filterState = 1;
+                    break;
+
+                case 1:
+                    // Return the last filter
+                    AccelerometerUtils.stopAccelerometer();
+                    filter2Btn.setBackgroundColor(androidx.appcompat.R.attr.colorPrimary);
+                    filterState = 2;
+                    break;
+
+                case 2:
+                    // Remove the filter and show the original image
+                    Glide.with(requireContext()).load(pictureUri).into(pictureView);
+                    filterState = 0;
+                    break;
             }
-            isOnFilter2 = !isOnFilter2;
         });
         addPictureBtn.setOnClickListener(v -> addPictureBtn());
         return view;
@@ -149,5 +169,64 @@ public class PictureFormFragment extends Fragment {
         bundle.putString("newPictureURI", pictureUri.toString());
         getParentFragmentManager().setFragmentResult("newPictureBundle", bundle);
         getParentFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //MicrophoneUtils.stopRecording();
+        AccelerometerUtils.stopAccelerometer();
+    }
+
+    @Override
+    public void onAccelerationChanged(float acceleration) {
+        accHandler.post(() -> {
+            Log.d("Accelerometer", String.valueOf(acceleration));
+            filter2Btn.setText(String.valueOf(acceleration));
+            // Apply the filter during recording on a background thread using a Runnable
+            backgroundHandler.post(new ImageProcessingRunnable(
+                    pictureView,
+                    acceleration,
+                    PictureFiltersUtils.FilterType.RANDOM_COLOR, requireContext())
+            );
+        });
+    }
+
+    @Override
+    public void onVolumeLevelChanged(float volumeLevel) {
+        micHandler.post(() -> {
+            filter1Btn.setText(String.valueOf(volumeLevel));
+
+            // Apply the filter during recording
+            backgroundHandler.post(new ImageProcessingRunnable(
+                    pictureView,
+                    volumeLevel / 42,
+                    PictureFiltersUtils.FilterType.DANK, requireContext())
+            );
+        });
+    }
+
+    private static class ImageProcessingRunnable implements Runnable {
+        private final float effectLevel;
+        private final PictureFiltersUtils.FilterType filterType;
+        private final ImageView pictureView;
+        private final Context context;
+
+        public ImageProcessingRunnable(ImageView pictureView, float effectLevel, PictureFiltersUtils.FilterType filterType, Context context) {
+            this.pictureView = pictureView;
+            this.effectLevel = effectLevel;
+            this.filterType = filterType;
+            this.context = context;
+        }
+
+        @Override
+        public void run() {
+            Glide.with(context).load(pictureUri).into(pictureView);
+            PictureFiltersUtils.applyFilter(
+                    pictureView,
+                    effectLevel,
+                    filterType
+            );
+        }
     }
 }
