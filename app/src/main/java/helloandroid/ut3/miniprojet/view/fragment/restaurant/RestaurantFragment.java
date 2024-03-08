@@ -2,7 +2,6 @@ package helloandroid.ut3.miniprojet.view.fragment.restaurant;
 
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,13 +52,21 @@ public class RestaurantFragment extends Fragment {
                             .addToBackStack(null)
                             .commit();
                 };
-                float avrgGrade = 0f;
-                Log.d("Bruh", String.valueOf(avrgGrade));
-                Log.d("Okay", String.valueOf(data.isEmpty()));
-                Log.d("Bruh", String.valueOf(avrgGrade));
-                avrgGrade /= data.size();
+                String noteText;
+
+                if (!data.isEmpty()) {
+                    float avrgGrade = 0f;
+                    for (Review rev : data) {
+                        avrgGrade += rev.getRating();
+                    }
+                    avrgGrade /= data.size();
+                    // Format avrgGrade to display two decimal places
+                    noteText = String.format("%.1f", avrgGrade);
+                } else {
+                    noteText = "Pas noté";
+                }
                 ((TextView) view.findViewById(R.id.restaurantName)).setText(restaurant.getTitle());
-                ((TextView) view.findViewById(R.id.note)).setText(String.valueOf(avrgGrade));
+                ((TextView) view.findViewById(R.id.note)).setText(noteText);
                 ((TextView) view.findViewById(R.id.restaurantBody)).setText(Html.fromHtml(restaurant.getInfos().replaceAll("<img[^>]*>", ""), Html.FROM_HTML_MODE_LEGACY));
                 view.findViewById(R.id.leaveReviewBtn).setOnClickListener(leaveReviewAction);
                 view.findViewById(R.id.reserveBtn).setOnClickListener(reserveAction);
