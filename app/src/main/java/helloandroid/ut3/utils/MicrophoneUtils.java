@@ -72,9 +72,7 @@ public class MicrophoneUtils {
             audioRecord.release();
             audioRecord = null;
         }
-
         handler.removeCallbacksAndMessages(null);
-        // Introduce a small delay before applying the filter
         handler.postDelayed(() -> {
 
             // Notify the callback that recording has stopped
@@ -82,6 +80,8 @@ public class MicrophoneUtils {
                 callback.onRecordingStopped();
             }
         }, 10); // Adjust the delay time as needed
+        // Introduce a small delay before applying the filter
+
     }
 
     public interface StopRecordingCallback {

@@ -80,7 +80,10 @@ public class PictureFiltersUtils {
     }
 
     private static void applyRandomColorFilter(Bitmap resultBitmap, float effectLevel) {
-        // Calculate the swap ratios based on effectLevel
+        // Ensure effectLevel is within a valid range (0 to 100)
+        effectLevel = Math.max(0, Math.min(100, effectLevel));
+
+        // Calculate the swap ratios based on the clamped effectLevel
         float swapRatioRed = 1.0f - (effectLevel / 100.0f);
         float swapRatioGreen = 0.5f + 0.5f * (effectLevel / 100.0f);
         float swapRatioBlue = 0.2f + 0.8f * (effectLevel / 100.0f);

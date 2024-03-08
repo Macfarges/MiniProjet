@@ -8,4 +8,5 @@
     <dimen name="marginStart">5sp</dimen>
     <dimen name="marginEnd">5sp</dimen>
     <dimen name="imgLittleSquareDim">90dp</dimen>
+    <dimen name="h2size">18sp</dimen>
 </resources>

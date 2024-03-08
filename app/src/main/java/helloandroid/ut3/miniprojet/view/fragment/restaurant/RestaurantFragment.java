@@ -2,6 +2,7 @@ package helloandroid.ut3.miniprojet.view.fragment.restaurant;
 
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,19 +14,18 @@ import androidx.fragment.app.Fragment;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 import helloandroid.ut3.miniprojet.R;
 import helloandroid.ut3.miniprojet.data.domain.Restaurant;
+import helloandroid.ut3.miniprojet.data.domain.Review;
+import helloandroid.ut3.miniprojet.data.service.FirebaseManager;
 import helloandroid.ut3.miniprojet.view.fragment.booking.BookingFragment;
 import helloandroid.ut3.miniprojet.view.fragment.review.form.ReviewFormFragment;
 
 public class RestaurantFragment extends Fragment {
 
     private final Restaurant restaurant;
-
-    //TODO: Ajouter bouton retour
-    //TODO: Ajouter nom
-    //TODO: Ajouter adresse
-    //TODO: Ajouter avis
 
 
     public RestaurantFragment(@NotNull Restaurant restaurant) {
@@ -35,23 +35,42 @@ public class RestaurantFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View.OnClickListener leaveReviewAction = v -> getParentFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainerView, new ReviewFormFragment(restaurant), null)
-                .setReorderingAllowed(true)
-                .addToBackStack(null)
-                .commit();
-        final View.OnClickListener reserveAction = v -> {
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainerView, new BookingFragment(this.restaurant), null)
-                    .setReorderingAllowed(true)
-                    .addToBackStack(null)
-                    .commit();
-        };
+
         View view = inflater.inflate(R.layout.fragment_restaurant, container, false);
-        ((TextView) view.findViewById(R.id.restaurantName)).setText(restaurant.getTitle());
-        ((TextView) view.findViewById(R.id.restaurantBody)).setText(Html.fromHtml(restaurant.getInfos().replaceAll("<img[^>]*>", ""), Html.FROM_HTML_MODE_LEGACY));
-        view.findViewById(R.id.leaveReviewBtn).setOnClickListener(leaveReviewAction);
-        view.findViewById(R.id.reserveBtn).setOnClickListener(reserveAction);
+        FirebaseManager.getInstance().getReviewsForRestaurant(restaurant.getId(), new FirebaseManager.DataCallback<List<Review>>() {
+            @Override
+            public void onSuccess(List<Review> data) {
+
+                final View.OnClickListener leaveReviewAction = v -> getParentFragmentManager().beginTransaction()
+                        .replace(R.id.fragmentContainerView, new ReviewFormFragment(restaurant), null)
+                        .setReorderingAllowed(true)
+                        .addToBackStack(null)
+                        .commit();
+                final View.OnClickListener reserveAction = v -> {
+                    getParentFragmentManager().beginTransaction()
+                            .replace(R.id.fragmentContainerView, new BookingFragment(restaurant), null)
+                            .setReorderingAllowed(true)
+                            .addToBackStack(null)
+                            .commit();
+                };
+                float avrgGrade = 0f;
+                Log.d("Bruh", String.valueOf(avrgGrade));
+                Log.d("Okay", String.valueOf(data.isEmpty()));
+                Log.d("Bruh", String.valueOf(avrgGrade));
+                avrgGrade /= data.size();
+                ((TextView) view.findViewById(R.id.restaurantName)).setText(restaurant.getTitle());
+                ((TextView) view.findViewById(R.id.note)).setText(String.valueOf(avrgGrade));
+                ((TextView) view.findViewById(R.id.restaurantBody)).setText(Html.fromHtml(restaurant.getInfos().replaceAll("<img[^>]*>", ""), Html.FROM_HTML_MODE_LEGACY));
+                view.findViewById(R.id.leaveReviewBtn).setOnClickListener(leaveReviewAction);
+                view.findViewById(R.id.reserveBtn).setOnClickListener(reserveAction);
+            }
+
+            @Override
+            public void onError(Exception exception) {
+
+            }
+        });
+
         return view;
     }
 }

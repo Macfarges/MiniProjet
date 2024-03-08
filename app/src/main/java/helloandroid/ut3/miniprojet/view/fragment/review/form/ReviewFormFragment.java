@@ -2,9 +2,14 @@ package helloandroid.ut3.miniprojet.view.fragment.review.form;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,6 +44,26 @@ public class ReviewFormFragment extends Fragment {
     private final List<ImageButton> pictures = new ArrayList<>();
     private final List<Uri> pictureURIs = new ArrayList<>();
     private final String genericErrorMessage = "Echec de l'ajout de votre avis";
+    // TextWatcher to listen for changes in review and source EditText fields
+    private final TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            // Enable submit button only if both review and source fields are not empty
+            EditText reviewEditText = requireView().findViewById(R.id.reviewEditText);
+            EditText sourceEditText = requireView().findViewById(R.id.sourceEditText);
+            Button submitReviewBtn = requireView().findViewById(R.id.submitReviewBtn);
+            submitReviewBtn.setEnabled(!TextUtils.isEmpty(reviewEditText.getText()) &&
+                    !TextUtils.isEmpty(sourceEditText.getText()));
+        }
+    };
     private TextView picturesTv;
     private StorageReference storageReference;
     private FlexboxLayout picturesLayout;
@@ -89,7 +114,21 @@ public class ReviewFormFragment extends Fragment {
             picturesLayout.addView(pictureBtn);
         }
         updatePicturesCount(pictures.size());
-        view.findViewById(R.id.submitReviewBtn).setOnClickListener(v -> onSubmitClick(view));
+        // Find review and source EditText fields
+        EditText reviewEditText = view.findViewById(R.id.reviewEditText);
+        EditText sourceEditText = view.findViewById(R.id.sourceEditText);
+        // Find submit review button
+        Button submitReviewBtn = view.findViewById(R.id.submitReviewBtn);
+
+        // Add text change listener to review and source EditText fields
+        reviewEditText.addTextChangedListener(textWatcher);
+        sourceEditText.addTextChangedListener(textWatcher);
+
+        // Initially disable submit button
+        submitReviewBtn.setEnabled(false);
+
+        // Set click listener to submit button
+        submitReviewBtn.setOnClickListener(v -> onSubmitClick(view));
         return view;
     }
 

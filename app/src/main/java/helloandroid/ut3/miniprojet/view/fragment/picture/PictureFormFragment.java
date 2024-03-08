@@ -10,17 +10,20 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -76,11 +79,36 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
         }
     });
     private int filter1State = 0, filter2State = 0;
+    private float effect1Level = 0;
+    private float effect2Level = 0;
 
     public PictureFormFragment() {
         //todo should have an uri as parameter for edition
     }
-//TODO : Fix bugs (if we want)
+
+    //TODO : Corriger bug filtre 2 (aspect grisé parfois, si utilisé après filtre 1)
+    //TODO : Corriger bug annulation autre filtre (effectLevel pas correct à priori)
+    //TODO : trouver une meilleure solution (bug du bouton retour lors du process du filtre 1)
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (filter1State == 1 || filter2State == 1) {
+                    Toast.makeText(requireContext(), "Validez le filtre avant de quitter", Toast.LENGTH_SHORT).show();
+                } else {
+                    effect1Level = 0;
+                    effect2Level = 0;
+                    previousPicture1 = null;
+                    currentPicture1 = null;
+                    previousPicture2 = null;
+                    currentPicture2 = null;
+                    getParentFragmentManager().popBackStack();
+                }
+            }
+        });
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -110,6 +138,7 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
                 case 0:
                     // Apply Filter 1
                     filter2Btn.setVisibility(View.GONE);
+                    addPictureBtn.setVisibility(View.GONE);
                     filter1Btn.setText("Valider filtre");
                     filter1Btn.setBackgroundColor(Color.GREEN);
                     previousPicture1 = FileUtils.getBitmapFromImageView(pictureView);
@@ -126,15 +155,20 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
                         filter1Btn.setText("Annuler filtre 1");
                         filter1State = 2;
                         filter2Btn.setVisibility(View.VISIBLE);
+                        addPictureBtn.setVisibility(View.VISIBLE);
                     });
                     break;
 
                 case 2:
                     // Remove the filter and show the original image
+                    Glide.with(requireContext()).load(pictureUri).into(pictureView);
                     if (currentPicture2 != null) {
-                        pictureView.setImageBitmap(currentPicture2);
-                    } else {
-                        Glide.with(requireContext()).load(pictureUri).into(pictureView);
+                        PictureFiltersUtils.applyFilter(
+                                pictureView,
+                                effect2Level,
+                                PictureFiltersUtils.FilterType.RANDOM_COLOR
+                        );
+                        effect2Level = 0;
                     }
                     filter1Btn.setBackgroundColor(androidx.appcompat.R.attr.colorPrimary);
                     filter1Btn.setText(R.string.filtre_1);
@@ -150,6 +184,7 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
                 case 0:
                     // Apply Filter 2 based on accelerometer data
                     filter1Btn.setVisibility(View.GONE);
+                    addPictureBtn.setVisibility(View.GONE);
                     filter2Btn.setText("Valider filtre");
                     filter2Btn.setBackgroundColor(Color.GREEN);
                     previousPicture2 = FileUtils.getBitmapFromImageView(pictureView);
@@ -165,14 +200,19 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
                     filter2Btn.setText("Annuler filtre 2");
                     filter2State = 2;
                     filter1Btn.setVisibility(View.VISIBLE);
+                    addPictureBtn.setVisibility(View.VISIBLE);
                     break;
 
                 case 2:
                     // Remove the filter and show the original image
+                    Glide.with(requireContext()).load(pictureUri).into(pictureView);
                     if (currentPicture1 != null) {
-                        pictureView.setImageBitmap(currentPicture1);
-                    } else {
-                        Glide.with(requireContext()).load(pictureUri).into(pictureView);
+                        PictureFiltersUtils.applyFilter(
+                                pictureView,
+                                effect1Level,
+                                PictureFiltersUtils.FilterType.DANK
+                        );
+                        effect1Level = 0;
                     }
                     filter2Btn.setBackgroundColor(androidx.appcompat.R.attr.colorPrimary);
                     filter2Btn.setText(R.string.filtre_2);
@@ -206,6 +246,12 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (isAdded()) {
+            MicrophoneUtils.stopRecording(() -> {
+                // Handle any additional tasks after recording has stopped
+
+            });
+        }
         AccelerometerUtils.stopAccelerometer();
     }
 
@@ -218,6 +264,8 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
                     PictureFiltersUtils.FilterType.RANDOM_COLOR, requireContext())
             );
         });
+        effect1Level = acceleration;
+
     }
 
     @Override
@@ -229,13 +277,14 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
                     PictureFiltersUtils.FilterType.DANK, requireContext())
             );
         });
+        effect2Level = volumeLevel;
     }
 
     private static class ImageProcessingRunnable implements Runnable {
         private final float effectLevel;
         private final PictureFiltersUtils.FilterType filterType;
         private final Context context;
-        private ImageView imgView = null;
+        private ImageView imgView = pictureView;
 
         public ImageProcessingRunnable(float effectLevel, PictureFiltersUtils.FilterType filterType, Context context) {
             this.effectLevel = effectLevel;
@@ -248,14 +297,11 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
             imgView = pictureView;
             if (previousPicture1 != null && previousPicture2 != null) {
                 if (currentPicture2 != null) {
-                    Log.d("LOL", "Applying filter 1");
                     imgView.setImageBitmap(currentPicture2);
                 } else {
-                    Log.d("LOL", "Applying filter 2");
                     imgView.setImageBitmap(currentPicture1);
                 }
             } else {
-                Log.d("LOL", "Applying a filter");
                 Glide.with(context).load(pictureUri).into(imgView);
             }
             PictureFiltersUtils.applyFilter(
@@ -263,6 +309,7 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
                     effectLevel,
                     filterType
             );
+
         }
     }
 }
