@@ -1,99 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".view.fragment.restaurant.RestaurantFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".view.fragment.restaurant.RestaurantFragment">
+    <!-- Views that should always be visible -->
+    <TextView
+        android:id="@+id/restaurantName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/marginTop"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
+        android:text="@string/templateRestaurantName"
+        android:textSize="@dimen/h1Size"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/reviewNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/marginTop"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/restaurantName">
+
+        <ImageView
+            android:id="@+id/star"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/star"
+            android:src="@drawable/ic_star_filled_34"
+            android:tag="1" />
 
         <TextView
-            android:id="@+id/restaurantName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/marginTop"
-            android:autoSizeTextType="uniform"
-            android:gravity="center"
-            android:text="@string/templateRestaurantName"
-            android:textSize="@dimen/h1Size"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <LinearLayout
-            android:id="@+id/reviewNote"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/restaurantName"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/restaurantBody">
-
-            <ImageView
-                android:id="@+id/star"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:contentDescription="@string/star"
-                android:src="@drawable/ic_star_filled_34"
-                android:tag="1" />
-
-            <TextView
-                android:id="@+id/note"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Note"
-                android:textSize="@dimen/h2size" />
-        </LinearLayout>
-
-
-        <TextView
-            android:id="@+id/restaurantBody"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/marginTop"
-            android:gravity="center"
-            android:text="@string/templateBody"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/reviewNote" />
-
-
-        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/note"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/marginBottomActions"
-            app:justifyContent="space_between"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_gravity="center"
+            android:text="Note"
+            android:textSize="@dimen/h2size" />
+    </LinearLayout>
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/toggleButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="@dimen/marginBottomActions"
+        app:justifyContent="space_evenly"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/reviewNote">
+
+        <!-- Expand/Collapse button for the first section -->
+        <Button
+            android:id="@+id/informationsToggleButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/informations"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/restaurantBody"
-            app:layout_constraintVertical_bias="1.0">
+            app:layout_constraintStart_toStartOf="parent" />
 
-            <Button
-                android:id="@+id/leaveReviewBtn"
+        <Button
+            android:id="@+id/avisToggleButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/avis"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </com.google.android.flexbox.FlexboxLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toTopOf="@id/bottomButtons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toggleButtons">
+
+        <!-- ConstraintLayout containing your existing content for the first section -->
+        <!-- ConstraintLayout containing your existing content for the first section -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:context=".view.fragment.restaurant.RestaurantFragment">
+
+            <TextView
+                android:id="@+id/restaurantBody"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/review"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="@dimen/marginTop"
+                android:gravity="center"
+                android:text="@string/templateBody"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                tools:ignore="ButtonStyle" />
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/reserveBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/reserve"
-                app:layout_constraintBottom_toBottomOf="parent"
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/reviewsList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:nestedScrollingEnabled="false"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                tools:ignore="ButtonStyle" />
-        </com.google.android.flexbox.FlexboxLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+    <!-- Your existing bottom buttons -->
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/bottomButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="@dimen/marginBottomActions"
+        app:justifyContent="space_between"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/leaveReviewBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/review"
+            tools:ignore="ButtonStyle" />
+
+        <Button
+            android:id="@+id/reserveBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reserve"
+            tools:ignore="ButtonStyle" />
+    </com.google.android.flexbox.FlexboxLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

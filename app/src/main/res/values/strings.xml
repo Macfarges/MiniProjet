@@ -26,4 +26,9 @@
     <string name="storedPicture">Photo existante</string>
     <string name="filtre_1">Filtre Microphone </string>
     <string name="filtre_2">Filtre Orientation</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="informations">Infos</string>
+    <string name="avis">Avis</string>
+    <string name="date">date</string>
 </resources>

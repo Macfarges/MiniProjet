@@ -24,10 +24,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- TODO all these activities should be fragments, and so removed from there -->
-        <activity android:name=".view.activity.MapActivity" />
-        <activity android:name=".view.activity.PhotoActivity" />
-        <activity android:name=".view.activity.ReviewActivity" />
     </application>
 
 </manifest>
