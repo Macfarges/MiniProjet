@@ -107,6 +107,20 @@
             android:text="@string/filtre_1"
             tools:ignore="ButtonStyle" />
 
+        <ImageView
+            android:id="@+id/smallImageView"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_star_filled_34" />
+
+        <ImageView
+            android:id="@+id/smallImageView2"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/pretty_heart" />
+
         <Button
             android:id="@+id/filter2Btn"
             android:layout_width="wrap_content"

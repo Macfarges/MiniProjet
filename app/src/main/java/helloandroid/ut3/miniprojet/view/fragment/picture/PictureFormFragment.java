@@ -2,14 +2,19 @@ package helloandroid.ut3.miniprojet.view.fragment.picture;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
+import android.util.Pair;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +35,9 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import helloandroid.ut3.miniprojet.R;
 import helloandroid.ut3.utils.AccelerometerUtils;
 import helloandroid.ut3.utils.FileUtils;
@@ -38,6 +46,7 @@ import helloandroid.ut3.utils.PictureFiltersUtils;
 
 public class PictureFormFragment extends Fragment implements MicrophoneUtils.MicrophoneCallback, AccelerometerUtils.AccelerometerCallback {
     private static final Handler mainHandler = new Handler(Looper.getMainLooper()); // Create handler associated with the main thread
+    private static final List<Pair<Drawable, float[]>> stickersList = new ArrayList<>();
     static Uri pictureUri;
     static ImageView pictureView;
     static Bitmap previousPicture1 = null;
@@ -81,6 +90,8 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
     private int filter1State = 0, filter2State = 0;
     private float effect1Level = 0;
     private float effect2Level = 0;
+    private ImageView smallImageView;
+    private ImageView smallImageView2;
 
     public PictureFormFragment() {
         //todo should have an uri as parameter for edition
@@ -139,6 +150,7 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
                     // Apply Filter 1
                     filter2Btn.setVisibility(View.GONE);
                     addPictureBtn.setVisibility(View.GONE);
+                    smallImageView.setVisibility(View.GONE);
                     filter1Btn.setText("Valider filtre");
                     filter1Btn.setBackgroundColor(Color.GREEN);
                     previousPicture1 = FileUtils.getBitmapFromImageView(pictureView);
@@ -156,6 +168,7 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
                         filter1State = 2;
                         filter2Btn.setVisibility(View.VISIBLE);
                         addPictureBtn.setVisibility(View.VISIBLE);
+                        smallImageView.setVisibility(View.VISIBLE);
                     });
                     break;
 
@@ -170,6 +183,7 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
                         );
                         effect2Level = 0;
                     }
+                    FileUtils.applyStickersToImageView(pictureView, stickersList);
                     filter1Btn.setBackgroundColor(androidx.appcompat.R.attr.colorPrimary);
                     filter1Btn.setText(R.string.filtre_1);
                     previousPicture1 = null;
@@ -185,6 +199,7 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
                     // Apply Filter 2 based on accelerometer data
                     filter1Btn.setVisibility(View.GONE);
                     addPictureBtn.setVisibility(View.GONE);
+                    smallImageView.setVisibility(View.GONE);
                     filter2Btn.setText("Valider filtre");
                     filter2Btn.setBackgroundColor(Color.GREEN);
                     previousPicture2 = FileUtils.getBitmapFromImageView(pictureView);
@@ -201,6 +216,7 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
                     filter2State = 2;
                     filter1Btn.setVisibility(View.VISIBLE);
                     addPictureBtn.setVisibility(View.VISIBLE);
+                    smallImageView.setVisibility(View.VISIBLE);
                     break;
 
                 case 2:
@@ -214,6 +230,7 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
                         );
                         effect1Level = 0;
                     }
+                    FileUtils.applyStickersToImageView(pictureView, stickersList);
                     filter2Btn.setBackgroundColor(androidx.appcompat.R.attr.colorPrimary);
                     filter2Btn.setText(R.string.filtre_2);
                     previousPicture2 = null;
@@ -222,9 +239,61 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
                     break;
             }
         });
+        smallImageView = view.findViewById(R.id.smallImageView);
+        smallImageView2 = view.findViewById(R.id.smallImageView2);
+        smallImageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                ClipData data = ClipData.newPlainText("", "");
+                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
+                v.startDragAndDrop(data, shadowBuilder, v, 0);
+                return true;
+            }
+        });
+        smallImageView2.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                ClipData data = ClipData.newPlainText("", "");
+                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
+                v.startDragAndDrop(data, shadowBuilder, v, 0);
+                return true;
+            }
+        });
+        pictureView.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                if (event.getAction() == DragEvent.ACTION_DROP) {// Handle the drop event
+                    Log.d("Dropped", "Dropped");
+                    handleDrop(event);
+                    return true;
+                }
+                return true;
+            }
+        });
         addPictureBtn.setOnClickListener(v -> addPictureBtn());
         return view;
     }
+
+    private void handleDrop(DragEvent event) {
+        // Get the dragged view
+        ImageView draggedView = (ImageView) event.getLocalState();
+
+        // Ensure it's the small image (if needed)
+        if (draggedView.getId() == R.id.smallImageView || draggedView.getId() == R.id.smallImageView2) {
+            float x = event.getX();
+            float y = event.getY();
+
+            // Get the Drawable associated with the smallImageView
+            Drawable drawable = draggedView.getDrawable();
+
+            // Add the drawable and coordinates to the list
+            stickersList.add(new Pair<>(drawable, new float[]{x, y}));
+
+            // Apply all stickers to the pictureView
+            FileUtils.applyStickersToImageView(pictureView, stickersList);
+        }
+    }
+
 
     private void addPictureBtn() {
         Bitmap bitmap = FileUtils.getBitmapFromImageView(pictureView);
@@ -304,6 +373,7 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
             } else {
                 Glide.with(context).load(pictureUri).into(imgView);
             }
+            FileUtils.applyStickersToImageView(imgView, stickersList);
             PictureFiltersUtils.applyFilter(
                     imgView,
                     effectLevel,

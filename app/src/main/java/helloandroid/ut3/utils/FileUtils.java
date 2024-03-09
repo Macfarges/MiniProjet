@@ -5,17 +5,20 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Pair;
 import android.widget.ImageView;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
+import java.util.List;
 
 public class FileUtils {
 
@@ -93,6 +96,45 @@ public class FileUtils {
             drawable.draw(canvas);
             return bitmap;
         }
+    }
+
+    public static void applyStickersToImageView(ImageView pictureView, List<Pair<Drawable, float[]>> stickersList) {
+        // Get the current Drawable of the pictureView
+        Drawable currentDrawable = pictureView.getDrawable();
+
+        // Create a new Bitmap and Canvas
+        Bitmap bitmap = Bitmap.createBitmap(currentDrawable.getIntrinsicWidth(), currentDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+
+        // Draw the current Drawable onto the canvas
+        currentDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        currentDrawable.draw(canvas);
+
+        // Draw the stickers onto the canvas
+        for (Pair<Drawable, float[]> stickerPair : stickersList) {
+            Drawable stickerDrawable = stickerPair.first;
+            float[] coordinates = stickerPair.second;
+
+            // Create a new matrix for each sticker
+            Matrix matrix = new Matrix();
+
+            // Translate the matrix to the specified coordinates
+            matrix.postTranslate(coordinates[0], coordinates[1]);
+
+            // Apply the matrix to the canvas
+            canvas.save();
+            canvas.concat(matrix);
+
+            // Draw the sticker onto the canvas
+            stickerDrawable.setBounds(0, 0, stickerDrawable.getIntrinsicWidth(), stickerDrawable.getIntrinsicHeight());
+            stickerDrawable.draw(canvas);
+
+            // Restore the original canvas state
+            canvas.restore();
+        }
+
+        // Set the modified bitmap to the pictureView
+        pictureView.setImageBitmap(bitmap);
     }
 }
 
