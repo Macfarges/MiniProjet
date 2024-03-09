@@ -4,9 +4,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
@@ -16,9 +19,12 @@ import java.util.stream.Collectors;
 
 import helloandroid.ut3.miniprojet.R;
 import helloandroid.ut3.miniprojet.data.domain.Review;
+import helloandroid.ut3.miniprojet.view.fragment.generic.TextPopupFragment;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder> {
-
+    private static final int MAX_DISPLAY_LINES = 4;
+    //Pas tres joli mais tant pis
+    private static final int MAX_TEXT_LENGTH = 114;
     private final List<Review> reviews;
     private final Context context;
 
@@ -53,6 +59,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         TextView noteInList;
         TextView dateInList;
         TextView textInList;
+        Button showMoreButton; // Add this button
+        boolean isFullTextDisplayed = false;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -60,6 +68,18 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
             noteInList = itemView.findViewById(R.id.noteInList);
             dateInList = itemView.findViewById(R.id.dateInList);
             textInList = itemView.findViewById(R.id.textInList);
+            showMoreButton = itemView.findViewById(R.id.showMoreButton);
+
+            FragmentManager fragmentManager = ((AppCompatActivity) itemView.getContext()).getSupportFragmentManager();
+
+            showMoreButton.setOnClickListener(v -> {
+                isFullTextDisplayed = !isFullTextDisplayed;
+                TextPopupFragment textPopupFragment = new TextPopupFragment(
+                        "Avis de " + nomInList.getText().toString()
+                );
+                textPopupFragment.setText(textInList.getText().toString());
+                textPopupFragment.show(fragmentManager, "text_popup_fragment_tag");
+            });
         }
 
         public void bind(Review review) {
@@ -73,6 +93,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
             dateInList.setText(formattedDate);
 
             textInList.setText(review.getText());
+            showMoreButton.setVisibility(review.getText().length() > MAX_TEXT_LENGTH ? View.VISIBLE : View.GONE);
+            textInList.setMaxLines(MAX_DISPLAY_LINES);
         }
     }
 }

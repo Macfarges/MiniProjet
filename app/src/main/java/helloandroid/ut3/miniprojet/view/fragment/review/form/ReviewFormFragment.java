@@ -1,10 +1,12 @@
 package helloandroid.ut3.miniprojet.view.fragment.review.form;
 
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +22,21 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -37,12 +45,14 @@ import helloandroid.ut3.miniprojet.data.domain.Restaurant;
 import helloandroid.ut3.miniprojet.data.domain.Review;
 import helloandroid.ut3.miniprojet.data.service.FirebaseManager;
 import helloandroid.ut3.miniprojet.view.fragment.picture.PictureFormFragment;
+import helloandroid.ut3.miniprojet.view.fragment.picture.PictureModifyFragment;
 import helloandroid.ut3.utils.FileUtils;
 
 public class ReviewFormFragment extends Fragment {
     private final Restaurant restaurant;
     private final List<ImageButton> pictures = new ArrayList<>();
     private final List<Uri> pictureURIs = new ArrayList<>();
+    private final Map<ImageButton, Uri> picturesMap = new HashMap<>();
     private final String genericErrorMessage = "Echec de l'ajout de votre avis";
     // TextWatcher to listen for changes in review and source EditText fields
     private final TextWatcher textWatcher = new TextWatcher() {
@@ -94,6 +104,7 @@ public class ReviewFormFragment extends Fragment {
             String newPictureURI = result.getString("newPictureURI");
             if (newPictureURI == null)
                 return;
+            Log.d("very ok", "is very ok");
             pictureURIs.add(Uri.parse(newPictureURI));
             pictures.add(pushNewPictureToLayout(Uri.parse(newPictureURI)));
             updatePicturesCount(pictures.size());
@@ -112,6 +123,11 @@ public class ReviewFormFragment extends Fragment {
         picturesLayout = view.findViewById(R.id.picturesLayout);
         for (ImageButton pictureBtn : pictures) {
             picturesLayout.addView(pictureBtn);
+            pictureBtn.setOnClickListener(v -> {
+                picturesLayout.removeView(pictureBtn);
+                onModifyClick(picturesMap.get(pictureBtn));
+
+            });
         }
         updatePicturesCount(pictures.size());
         // Find review and source EditText fields
@@ -130,6 +146,18 @@ public class ReviewFormFragment extends Fragment {
         // Set click listener to submit button
         submitReviewBtn.setOnClickListener(v -> onSubmitClick(view));
         return view;
+    }
+
+    private void onModifyClick(Uri pictureUri) {
+        getParentFragmentManager().beginTransaction()
+                .replace(
+                        R.id.fragmentContainerView,
+                        new PictureModifyFragment(pictureUri),
+                        null
+                )
+                .setReorderingAllowed(true)
+                .addToBackStack("pictureModify")
+                .commit();
     }
 
     private void onStarClick(ImageView clickedStar) {
@@ -190,6 +218,23 @@ public class ReviewFormFragment extends Fragment {
         Glide.with(requireContext())
                 .load(pictureUri)
                 .apply(requestOptions)
+                .addListener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        // Handle load failure if needed
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        // TODO : voir s'il cela ne pose pas de problemes
+                        picturesMap.put(pictureBtn, pictureUri);
+                        pictureBtn.setOnClickListener(v -> onModifyClick(pictureUri));
+                        // Notify the fragment that the picture has been loaded
+                        Log.d("okay", String.valueOf(picturesMap.size()));
+                        return false;
+                    }
+                })
                 .into(pictureBtn);
         picturesLayout.addView(pictureBtn);
         return pictureBtn;

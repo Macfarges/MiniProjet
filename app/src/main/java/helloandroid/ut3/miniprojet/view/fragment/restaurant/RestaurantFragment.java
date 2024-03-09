@@ -68,7 +68,6 @@ public class RestaurantFragment extends Fragment {
                             arrayReviews
                     );
                     reviewsList.setAdapter(arrayAdapter);
-
                     for (Review rev : data) {
                         avrgGrade += rev.getRating();
                     }
@@ -110,6 +109,7 @@ public class RestaurantFragment extends Fragment {
 
                 // Set default visibility and button state
                 restaurantBody.setVisibility(View.VISIBLE);
+                //TODO : dans la reviewsList, si une review est trop longue, bouton afficher plus into popup
                 reviewsList.setVisibility(View.GONE);
                 informationsToggleButton.setEnabled(false);
                 avisToggleButton.setEnabled(true);

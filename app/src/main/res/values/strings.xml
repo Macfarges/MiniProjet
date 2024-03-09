@@ -31,4 +31,7 @@
     <string name="informations">Infos</string>
     <string name="avis">Avis</string>
     <string name="date">date</string>
+    <string name="modifyPictureTitle">Options de l\'image</string>
+    <string name="modify">Modifier</string>
+    <string name="delete">Supprimer</string>
 </resources>
