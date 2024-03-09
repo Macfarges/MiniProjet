@@ -11,6 +11,7 @@ import helloandroid.ut3.miniprojet.view.fragment.restaurant.ListRestaurantFragme
 public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_MiniProjet);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         FragmentManager fragmentManager = getSupportFragmentManager();

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -40,6 +41,11 @@ public class RestaurantFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_restaurant, container, false);
+        // Inside the onCreateView method
+        ProgressBar loadingProgressBar = view.findViewById(R.id.loadingProgressBar);
+
+// Show the loading ProgressBar
+        loadingProgressBar.setVisibility(View.VISIBLE);
         FirebaseManager.getInstance().getReviewsForRestaurant(restaurant.getId(), new FirebaseManager.DataCallback<List<Review>>() {
             @Override
             public void onSuccess(List<Review> data) {
@@ -59,6 +65,15 @@ public class RestaurantFragment extends Fragment {
                 String noteText;
                 RecyclerView reviewsList = view.findViewById(R.id.reviewsList);
                 reviewsList.setLayoutManager(new LinearLayoutManager(requireContext()));
+                //TODO : empecher de voir les avis s'il n'y en a pas
+                final TextView restaurantBody = view.findViewById(R.id.restaurantBody);
+                restaurantBody.setText(Html.fromHtml(
+                        restaurant.getInfos().replaceAll("<img[^>]*>", ""),
+                        Html.FROM_HTML_MODE_LEGACY)
+                );
+                // Set default visibility and button state
+                restaurantBody.setVisibility(View.VISIBLE);
+                reviewsList.setVisibility(View.GONE);
                 if (!data.isEmpty()) {
                     float avrgGrade = 0f;
                     List<Review> arrayReviews = new ArrayList<>();
@@ -74,45 +89,41 @@ public class RestaurantFragment extends Fragment {
                     avrgGrade /= data.size();
                     // Format avrgGrade to display two decimal places
                     noteText = String.format("%.1f", avrgGrade);
+
+                    Button avisToggleButton = view.findViewById(R.id.avisToggleButton);
+                    Button informationsToggleButton = view.findViewById(R.id.informationsToggleButton);
+                    informationsToggleButton.setOnClickListener(v -> {
+                        if (!avisToggleButton.isEnabled()) {
+                            restaurantBody.setVisibility(View.VISIBLE);
+                            reviewsList.setVisibility(View.GONE);
+                            informationsToggleButton.setEnabled(false);
+                            avisToggleButton.setEnabled(true);
+                        }
+                    });
+
+                    avisToggleButton.setOnClickListener(v -> {
+                        if (!informationsToggleButton.isEnabled()) {
+                            restaurantBody.setVisibility(View.GONE);
+                            reviewsList.setVisibility(View.VISIBLE);
+                            informationsToggleButton.setEnabled(true);
+                            avisToggleButton.setEnabled(false);
+                        }
+                    });
+
+                    avisToggleButton.setVisibility(View.VISIBLE);
+                    informationsToggleButton.setVisibility(View.VISIBLE);
+                    informationsToggleButton.setEnabled(false);
+                    avisToggleButton.setEnabled(true);
                 } else {
                     noteText = "Pas noté";
+
                 }
-                //TODO : empecher de voir les avis s'il n'y en a pas
-                final TextView restaurantBody = view.findViewById(R.id.restaurantBody);
-                Button informationsToggleButton = view.findViewById(R.id.informationsToggleButton);
-                Button avisToggleButton = view.findViewById(R.id.avisToggleButton);
                 ((TextView) view.findViewById(R.id.restaurantName)).setText(restaurant.getTitle());
                 ((TextView) view.findViewById(R.id.note)).setText(noteText);
-                restaurantBody.setText(Html.fromHtml(
-                        restaurant.getInfos().replaceAll("<img[^>]*>", ""),
-                        Html.FROM_HTML_MODE_LEGACY)
-                );
                 view.findViewById(R.id.leaveReviewBtn).setOnClickListener(leaveReviewAction);
                 view.findViewById(R.id.reserveBtn).setOnClickListener(reserveAction);
-                informationsToggleButton.setOnClickListener(v -> {
-                    if (!avisToggleButton.isEnabled()) {
-                        restaurantBody.setVisibility(View.VISIBLE);
-                        reviewsList.setVisibility(View.GONE);
-                        informationsToggleButton.setEnabled(false);
-                        avisToggleButton.setEnabled(true);
-                    }
-                });
 
-                avisToggleButton.setOnClickListener(v -> {
-                    if (!informationsToggleButton.isEnabled()) {
-                        restaurantBody.setVisibility(View.GONE);
-                        reviewsList.setVisibility(View.VISIBLE);
-                        informationsToggleButton.setEnabled(true);
-                        avisToggleButton.setEnabled(false);
-                    }
-                });
-
-                // Set default visibility and button state
-                restaurantBody.setVisibility(View.VISIBLE);
-                //TODO : dans la reviewsList, si une review est trop longue, bouton afficher plus into popup
-                reviewsList.setVisibility(View.GONE);
-                informationsToggleButton.setEnabled(false);
-                avisToggleButton.setEnabled(true);
+                loadingProgressBar.setVisibility(View.GONE);
             }
 
             @Override

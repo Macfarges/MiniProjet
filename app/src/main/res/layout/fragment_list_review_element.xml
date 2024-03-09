@@ -18,6 +18,7 @@
         app:alignItems="center"
         app:dividerDrawableHorizontal="@drawable/reviews_middle_divider"
         app:flexDirection="column"
+        app:layout_flexBasisPercent="30%"
         app:layout_flexShrink="0"
         app:showDivider="middle">
 
@@ -25,8 +26,9 @@
             android:id="@+id/nomInList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
             android:gravity="center_vertical"
-
+            android:maxLines="1"
             android:minHeight="?android:attr/listPreferredItemHeightSmall"
             android:paddingStart="?android:attr/listPreferredItemPaddingStart"
             android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
@@ -40,6 +42,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/ic_star_filled_34"
             android:gravity="center"
+            android:maxLines="1"
             android:minWidth="?android:attr/listPreferredItemHeightSmall"
             android:minHeight="?android:attr/listPreferredItemHeightSmall"
             android:paddingStart="?android:attr/listPreferredItemPaddingStart"
@@ -53,6 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
+            android:maxLines="1"
             android:minHeight="?android:attr/listPreferredItemHeightSmall"
             android:paddingStart="?android:attr/listPreferredItemPaddingStart"
             android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
@@ -65,7 +69,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:flexDirection="column"
-        app:layout_flexGrow="1">
+        app:layout_flexGrow="10">
 
         <TextView
             android:id="@+id/textInList"
