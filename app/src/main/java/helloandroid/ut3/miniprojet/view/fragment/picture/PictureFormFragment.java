@@ -151,6 +151,7 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
                     filter2Btn.setVisibility(View.GONE);
                     addPictureBtn.setVisibility(View.GONE);
                     smallImageView.setVisibility(View.GONE);
+                    smallImageView2.setVisibility(View.GONE);
                     filter1Btn.setText("Valider filtre");
                     filter1Btn.setBackgroundColor(Color.GREEN);
                     previousPicture1 = FileUtils.getBitmapFromImageView(pictureView);
@@ -169,12 +170,14 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
                         filter2Btn.setVisibility(View.VISIBLE);
                         addPictureBtn.setVisibility(View.VISIBLE);
                         smallImageView.setVisibility(View.VISIBLE);
+                        smallImageView2.setVisibility(View.VISIBLE);
                     });
                     break;
 
                 case 2:
                     // Remove the filter and show the original image
                     Glide.with(requireContext()).load(pictureUri).into(pictureView);
+                    FileUtils.applyStickersToImageView(pictureView, stickersList);
                     if (currentPicture2 != null) {
                         PictureFiltersUtils.applyFilter(
                                 pictureView,
@@ -183,7 +186,6 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
                         );
                         effect2Level = 0;
                     }
-                    FileUtils.applyStickersToImageView(pictureView, stickersList);
                     filter1Btn.setBackgroundColor(androidx.appcompat.R.attr.colorPrimary);
                     filter1Btn.setText(R.string.filtre_1);
                     previousPicture1 = null;
@@ -200,6 +202,7 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
                     filter1Btn.setVisibility(View.GONE);
                     addPictureBtn.setVisibility(View.GONE);
                     smallImageView.setVisibility(View.GONE);
+                    smallImageView2.setVisibility(View.GONE);
                     filter2Btn.setText("Valider filtre");
                     filter2Btn.setBackgroundColor(Color.GREEN);
                     previousPicture2 = FileUtils.getBitmapFromImageView(pictureView);
@@ -217,11 +220,13 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
                     filter1Btn.setVisibility(View.VISIBLE);
                     addPictureBtn.setVisibility(View.VISIBLE);
                     smallImageView.setVisibility(View.VISIBLE);
+                    smallImageView2.setVisibility(View.VISIBLE);
                     break;
 
                 case 2:
                     // Remove the filter and show the original image
                     Glide.with(requireContext()).load(pictureUri).into(pictureView);
+                    FileUtils.applyStickersToImageView(pictureView, stickersList);
                     if (currentPicture1 != null) {
                         PictureFiltersUtils.applyFilter(
                                 pictureView,
@@ -230,7 +235,6 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
                         );
                         effect1Level = 0;
                     }
-                    FileUtils.applyStickersToImageView(pictureView, stickersList);
                     filter2Btn.setBackgroundColor(androidx.appcompat.R.attr.colorPrimary);
                     filter2Btn.setText(R.string.filtre_2);
                     previousPicture2 = null;
