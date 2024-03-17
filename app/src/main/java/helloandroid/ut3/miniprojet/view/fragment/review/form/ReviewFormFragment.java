@@ -135,26 +135,19 @@ public class ReviewFormFragment extends Fragment {
         picturesLayout = view.findViewById(R.id.picturesLayout);
         for (ImageButton pictureBtn : pictures) {
             picturesLayout.addView(pictureBtn);
-            pictureBtn.setOnClickListener(v -> {
-                onModifyClick(picturesMap.get(pictureBtn));
-
-            });
+            pictureBtn.setOnClickListener(v -> onModifyClick(picturesMap.get(pictureBtn)));
         }
         updatePicturesCount(pictures.size());
-        // Find review and source EditText fields
         EditText reviewEditText = view.findViewById(R.id.reviewEditText);
         EditText sourceEditText = view.findViewById(R.id.sourceEditText);
-        // Find submit review button
         Button submitReviewBtn = view.findViewById(R.id.submitReviewBtn);
 
-        // Add text change listener to review and source EditText fields
         reviewEditText.addTextChangedListener(textWatcher);
         sourceEditText.addTextChangedListener(textWatcher);
 
         // Initially disable submit button
         submitReviewBtn.setEnabled(false);
 
-        // Set click listener to submit button
         submitReviewBtn.setOnClickListener(v -> onSubmitClick(view));
         return view;
     }
@@ -195,8 +188,8 @@ public class ReviewFormFragment extends Fragment {
                         rating,
                         pushPictures(),
                         restaurant.getId()
-                )
-                , new FirebaseManager.DataCallback<Review>() {
+                ),
+                new FirebaseManager.DataCallback<Review>() {
                     @Override
                     public void onSuccess(Review review) {
                         Toast.makeText(requireContext(), "Votre avis a été envoyé !", Toast.LENGTH_SHORT).show();

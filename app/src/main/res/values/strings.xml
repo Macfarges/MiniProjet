@@ -31,8 +31,10 @@
     <string name="informations">Infos</string>
     <string name="avis">Avis</string>
     <string name="date">date</string>
-    <string name="modifyPictureTitle">Options de l\'image</string>
+    <string name="viewPictureTitle">Prévisualisation de l\'image</string>
     <string name="modify">Modifier</string>
     <string name="delete">Supprimer</string>
+    <string name="deleteOfReview">Supprimer de l\'avis</string>
     <string name="authors">Matthias Farges et Sylvain Roehrig</string>
+    <string name="note">Note</string>
 </resources>

@@ -4,11 +4,15 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,12 +26,14 @@ public class FirebaseManager {
     private static final String REVIEWS_NODE = "reviews";
     private static final String RESERVATIONS_NODE = "reservations";
     private static final String IMAGES_NODE = "images";
-
+    private static final String PICTURES_REVIEWS_STORAGE_PATH = "reviews/%s/pictures";
     private static FirebaseManager instance;
     private final FirebaseDatabase database;
+    private final FirebaseStorage storage;
 
     private FirebaseManager() {
-        database = FirebaseDatabase.getInstance("https://miniprojet-b19a8-default-rtdb.europe-west1.firebasedatabase.app/");
+        database = FirebaseDatabase.getInstance("https://miniprojet-b19a8-default-rtdb.europe-west1.firebasedatabase.app");
+        storage = FirebaseStorage.getInstance("gs://miniprojet-b19a8.appspot.com");
     }
 
     public static synchronized FirebaseManager getInstance() {
@@ -127,6 +133,27 @@ public class FirebaseManager {
                         callback.onError(databaseError.toException());
                     }
                 });
+    }
+
+    public Task<List<StorageReference>> getAllImagesForRestaurant(String restaurantId) {
+        String imagePath = String.format(PICTURES_REVIEWS_STORAGE_PATH, restaurantId);
+        StorageReference restaurantRef = storage.getReference().child(imagePath);
+
+        return restaurantRef.listAll().continueWith(task -> {
+            List<StorageReference> imageRefs = new ArrayList<>();
+            if (task.isSuccessful()) {
+                ListResult result = task.getResult();
+                if (result != null) {
+                    imageRefs.addAll(result.getItems());
+                }
+            } else {
+                Exception exception = task.getException();
+                if (exception != null) {
+                    throw exception;
+                }
+            }
+            return imageRefs;
+        });
     }
 
     public interface DataCallback<T> {

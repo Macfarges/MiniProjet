@@ -1,5 +1,6 @@
 package helloandroid.ut3.miniprojet.view.fragment.restaurant;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ public class MapsRestaurantFragment extends Fragment {
         this.restaurants = restaurants;
     }
 
+    @SuppressLint("PotentialBehaviorOverride")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -41,13 +44,21 @@ public class MapsRestaurantFragment extends Fragment {
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(googleMap -> {
+                googleMap.setOnMarkerClickListener(marker -> {
+                    System.out.println("Marker clicked, id: " + marker.getTag());
+                    // Return true to indicate that the click event is handled
+                    return true;
+                });
+
                 List<LatLng> latLngs = new ArrayList<>();
                 restaurants.forEach(restaurant ->
                         {
                             latLngs.add(new LatLng(Double.parseDouble(restaurant.getLat()), Double.parseDouble(restaurant.getLon())));
-                            googleMap.addMarker(new MarkerOptions()
+                            Marker marker = googleMap.addMarker(new MarkerOptions()
                                     .position(latLngs.get(latLngs.size() - 1))
                                     .title(restaurant.getTitle()));
+                            assert marker != null;
+                            marker.setTag(restaurant.getId());
                         }
                 );
                 LatLngBounds.Builder builder = new LatLngBounds.Builder();
