@@ -11,6 +11,7 @@ import helloandroid.ut3.miniprojet.R;
 import helloandroid.ut3.miniprojet.view.fragment.picture.PictureFormFragment;
 
 public class ReviewListFragment extends Fragment {
+    //TODO : Supprimer OU appeler lors d'appui sur bouton avis sur restaurant
     public ReviewListFragment() {
     }
 
@@ -22,6 +23,6 @@ public class ReviewListFragment extends Fragment {
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();
-        return inflater.inflate(R.layout.fragment_review_list, container, false);
+        return inflater.inflate(R.layout.fragment_list_review_element, container, false);
     }
 }

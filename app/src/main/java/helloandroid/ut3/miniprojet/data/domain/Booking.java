@@ -5,6 +5,7 @@ import java.util.UUID;
 
 public class Booking {
     private String id;
+    private String reservationName;
 
     private String restaurantName;
     private Date date;
@@ -17,7 +18,7 @@ public class Booking {
     }
 
 
-    public Booking(Date date, boolean isMidi, int nbPersons, String restaurantName) {
+    public Booking(Date date, boolean isMidi, int nbPersons, String restaurantName, String reservationName) {
         if (nbPersons < 1 || nbPersons > 10) {
             throw new IllegalArgumentException("Number of person must be between 1 and 10");
         }
@@ -26,6 +27,11 @@ public class Booking {
         this.isMidi = isMidi;
         this.nbPersons = nbPersons;
         this.restaurantName = restaurantName;
+        this.reservationName = reservationName;
+    }
+
+    public String getReservationName() {
+        return reservationName;
     }
 
     public String getRestaurantName() {

@@ -1,5 +1,7 @@
 package helloandroid.ut3.miniprojet.data.service;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
@@ -105,7 +107,7 @@ public class FirebaseManager {
 
     public void getReviewsForRestaurant(String restaurantId, final DataCallback<List<Review>> callback) {
         DatabaseReference reviewsRef = getReviewsRef();
-        reviewsRef.orderByChild("restaurant/id").equalTo(restaurantId)
+        reviewsRef.orderByChild("restaurant").equalTo(restaurantId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -121,6 +123,7 @@ public class FirebaseManager {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.e("DataCallback", "onCancelled invoked with error: " + databaseError.getMessage());
                         callback.onError(databaseError.toException());
                     }
                 });

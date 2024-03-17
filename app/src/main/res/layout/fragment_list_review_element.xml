@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:alignContent="center"
+    app:alignItems="center"
+    app:dividerDrawableHorizontal="@drawable/reviews_divider"
+    app:dividerDrawableVertical="@drawable/reviews_middle_divider"
+    app:showDivider="middle|end">
+
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/leftInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:alignContent="center"
+        app:alignItems="center"
+        app:dividerDrawableHorizontal="@drawable/reviews_middle_divider"
+        app:flexDirection="column"
+        app:layout_flexBasisPercent="30%"
+        app:layout_flexShrink="0"
+        app:showDivider="middle">
+
+        <TextView
+            android:id="@+id/nomInList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:minHeight="?android:attr/listPreferredItemHeightSmall"
+            android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+            android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
+            android:text="@string/noun"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall" />
+
+
+        <TextView
+            android:id="@+id/noteInList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_star_filled_34"
+            android:gravity="center"
+            android:maxLines="1"
+            android:minWidth="?android:attr/listPreferredItemHeightSmall"
+            android:minHeight="?android:attr/listPreferredItemHeightSmall"
+            android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+            android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
+            android:text="@string/avis"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall" />
+
+
+        <TextView
+            android:id="@+id/dateInList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:minHeight="?android:attr/listPreferredItemHeightSmall"
+            android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+            android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
+            android:text="@string/date"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall" />
+
+    </com.google.android.flexbox.FlexboxLayout>
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:flexDirection="column"
+        app:layout_flexGrow="10">
+
+        <TextView
+            android:id="@+id/textInList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:minHeight="?android:attr/listPreferredItemHeightSmall"
+            android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+            android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
+            android:text="@string/avis"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall"
+            app:layout_constraintStart_toEndOf="@id/leftInfo" />
+
+        <Button
+            android:id="@+id/showMoreButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:text="Afficher plus"
+            app:layout_alignSelf="flex_end" />
+    </com.google.android.flexbox.FlexboxLayout>
+
+</com.google.android.flexbox.FlexboxLayout>

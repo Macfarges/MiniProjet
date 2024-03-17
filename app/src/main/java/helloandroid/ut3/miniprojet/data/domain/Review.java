@@ -57,4 +57,10 @@ public class Review {
     public String getRestaurant() {
         return restaurantId;
     }
+
+    // Override toString for easy printing
+    @Override
+    public String toString() {
+        return rating + " - " + date + " - " + text;
+    }
 }
