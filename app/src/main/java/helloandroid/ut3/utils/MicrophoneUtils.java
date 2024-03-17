@@ -18,7 +18,6 @@ public class MicrophoneUtils {
     private static final int CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO;
     private static final int AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT;
     private static final Handler handler = new Handler();
-    private static final int YOUR_REQUEST_CODE = 15;
     private static boolean isMonitoring = false;
     private static AudioRecord audioRecord;
     private static MicrophoneCallback microphoneCallback;
@@ -49,9 +48,9 @@ public class MicrophoneUtils {
         int bufferSize = AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL_CONFIG, AUDIO_FORMAT);
 
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.RECORD_AUDIO}, YOUR_REQUEST_CODE);
-        }
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.RECORD_AUDIO}, 15);
 
+        }
         audioRecord = new AudioRecord(
                 MediaRecorder.AudioSource.MIC,
                 SAMPLE_RATE,
@@ -62,6 +61,7 @@ public class MicrophoneUtils {
         isMonitoring = true;
         audioRecord.startRecording();
         handler.postDelayed(audioMonitoringRunnable, 0);
+
     }
 
     public static void stopRecording(StopRecordingCallback callback) {

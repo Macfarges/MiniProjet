@@ -2,9 +2,11 @@ package helloandroid.ut3.miniprojet.view.fragment.picture;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.Manifest;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -29,6 +31,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -45,6 +48,7 @@ import helloandroid.ut3.utils.MicrophoneUtils;
 import helloandroid.ut3.utils.PictureFiltersUtils;
 
 public class PictureFormFragment extends Fragment implements MicrophoneUtils.MicrophoneCallback, AccelerometerUtils.AccelerometerCallback {
+    private static final int YOUR_REQUEST_CODE = 15;
     static Uri pictureUri;
     static ImageView pictureView;
     static Bitmap previousPicture1 = null;
@@ -149,16 +153,20 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
             switch (filter1State) {
                 case 0:
                     // Apply Filter 1
-                    filter2Btn.setVisibility(View.GONE);
-                    addPictureBtn.setVisibility(View.GONE);
-                    smallImageView.setVisibility(View.GONE);
-                    smallImageView2.setVisibility(View.GONE);
-                    filter1Btn.setText("Valider filtre");
-                    filter1Btn.setBackgroundColor(Color.GREEN);
-                    previousPicture1 = FileUtils.getBitmapFromImageView(pictureView);
-                    MicrophoneUtils.setMicrophoneCallback(this);
-                    MicrophoneUtils.startRecording(requireContext(), requireActivity());
-                    filter1State = 1;
+                    if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.RECORD_AUDIO}, YOUR_REQUEST_CODE);
+                    } else {
+                        filter2Btn.setVisibility(View.GONE);
+                        addPictureBtn.setVisibility(View.GONE);
+                        smallImageView.setVisibility(View.GONE);
+                        smallImageView2.setVisibility(View.GONE);
+                        filter1Btn.setText("Valider filtre");
+                        filter1Btn.setBackgroundColor(Color.GREEN);
+                        previousPicture1 = FileUtils.getBitmapFromImageView(pictureView);
+                        MicrophoneUtils.setMicrophoneCallback(this);
+                        MicrophoneUtils.startRecording(requireContext(), requireActivity());
+                        filter1State = 1;
+                    }
                     break;
 
                 case 1:
