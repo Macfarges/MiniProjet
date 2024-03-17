@@ -156,6 +156,18 @@ public class FirebaseManager {
         });
     }
 
+    public List<String> getRemoteUrls(List<String> picturesUrls) {
+        List<String> result = new ArrayList<>();
+        if (picturesUrls == null) {
+            return null;
+        }
+        for (String url : picturesUrls) {
+            StorageReference imageRef = storage.getReference().child(url);
+            imageRef.getDownloadUrl().addOnSuccessListener(uri -> result.add(uri.toString()));
+        }
+        return result;
+    }
+
     public interface DataCallback<T> {
         void onSuccess(T data);
 

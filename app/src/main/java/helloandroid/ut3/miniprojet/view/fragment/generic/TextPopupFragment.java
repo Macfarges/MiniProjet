@@ -4,16 +4,19 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.bumptech.glide.Glide;
 import com.google.android.flexbox.FlexboxLayout;
 
 import java.util.List;
 
 import helloandroid.ut3.miniprojet.R;
+import helloandroid.ut3.miniprojet.data.service.FirebaseManager;
 
 public class TextPopupFragment extends DialogFragment {
 
@@ -53,11 +56,12 @@ public class TextPopupFragment extends DialogFragment {
 
         View view = requireActivity().getLayoutInflater().inflate(R.layout.fragment_review_details, null);
         FlexboxLayout picturesLayout = view.findViewById(R.id.picturesList);
-        if (urls != null) {
-            for (String url : urls) {
-                //ImageView imageView = new ImageView(requireActivity());
-                //Glide.with(requireContext()).load(url).into(imageView);
-                //picturesLayout.addView(imageView);
+        List<String> remoteUrls = FirebaseManager.getInstance().getRemoteUrls(urls);
+        if (remoteUrls != null) {
+            for (String url : remoteUrls) {
+                ImageView imageView = new ImageView(requireActivity());
+                Glide.with(requireContext()).load(url).into(imageView);
+                picturesLayout.addView(imageView);
             }
         }
 
