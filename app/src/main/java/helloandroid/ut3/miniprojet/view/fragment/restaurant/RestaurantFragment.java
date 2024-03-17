@@ -12,8 +12,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.android.flexbox.JustifyContent;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -64,8 +67,10 @@ public class RestaurantFragment extends Fragment {
                 };
                 String noteText;
                 RecyclerView reviewsList = view.findViewById(R.id.reviewsList);
-                reviewsList.setLayoutManager(new LinearLayoutManager(requireContext()));
-                //TODO : empecher de voir les avis s'il n'y en a pas
+                FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(requireContext());
+                layoutManager.setFlexDirection(FlexDirection.COLUMN);
+                layoutManager.setJustifyContent(JustifyContent.FLEX_END);
+                reviewsList.setLayoutManager(layoutManager);
                 final TextView restaurantBody = view.findViewById(R.id.restaurantBody);
                 restaurantBody.setText(Html.fromHtml(
                         restaurant.getInfos().replaceAll("<img[^>]*>", ""),

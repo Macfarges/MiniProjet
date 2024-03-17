@@ -70,16 +70,6 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
             textInList = itemView.findViewById(R.id.textInList);
             showMoreButton = itemView.findViewById(R.id.showMoreButton);
 
-            FragmentManager fragmentManager = ((AppCompatActivity) itemView.getContext()).getSupportFragmentManager();
-
-            showMoreButton.setOnClickListener(v -> {
-                isFullTextDisplayed = !isFullTextDisplayed;
-                TextPopupFragment textPopupFragment = new TextPopupFragment(
-                        "Avis de " + nomInList.getText().toString()
-                );
-                textPopupFragment.setText(textInList.getText().toString());
-                textPopupFragment.show(fragmentManager, "text_popup_fragment_tag");
-            });
         }
 
         public void bind(Review review) {
@@ -93,8 +83,20 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
             dateInList.setText(formattedDate);
 
             textInList.setText(review.getText());
-            showMoreButton.setVisibility(review.getText().length() > MAX_TEXT_LENGTH ? View.VISIBLE : View.GONE);
+            //TODO : ET si pas d'images
+            showMoreButton.setVisibility(review.getText().length() > MAX_TEXT_LENGTH
+                    || review.getPictureUrls() != null ? View.VISIBLE : View.GONE);
             textInList.setMaxLines(MAX_DISPLAY_LINES);
+            showMoreButton.setOnClickListener(v -> {
+                FragmentManager fragmentManager = ((AppCompatActivity) itemView.getContext()).getSupportFragmentManager();
+                isFullTextDisplayed = !isFullTextDisplayed;
+                TextPopupFragment textPopupFragment = new TextPopupFragment(
+                        "Avis de " + nomInList.getText().toString()
+                );
+                textPopupFragment.setText(textInList.getText().toString());
+                textPopupFragment.setUrls(review.getPictureUrls());
+                textPopupFragment.show(fragmentManager, "text_popup_fragment_tag");
+            });
         }
     }
 }

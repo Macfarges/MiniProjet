@@ -238,7 +238,6 @@ public class ReviewFormFragment extends Fragment {
 
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        // TODO : voir s'il cela ne pose pas de problemes
                         picturesMap.put(pictureBtn, pictureUri);
                         pictureBtn.setOnClickListener(v -> onModifyClick(pictureUri));
                         // Notify the fragment that the picture has been loaded

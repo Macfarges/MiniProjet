@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:alignContent="center"
-    app:alignItems="center"
+    app:alignItems="stretch"
     app:dividerDrawableHorizontal="@drawable/reviews_divider"
     app:dividerDrawableVertical="@drawable/reviews_middle_divider"
     app:showDivider="middle|end">
@@ -69,6 +69,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:flexDirection="column"
+        app:justifyContent="space_around"
         app:layout_flexGrow="10">
 
         <TextView
@@ -80,17 +81,22 @@
             android:paddingStart="?android:attr/listPreferredItemPaddingStart"
             android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
             android:text="@string/avis"
-            android:textAppearance="?android:attr/textAppearanceListItemSmall"
-            app:layout_constraintStart_toEndOf="@id/leftInfo" />
+            android:textAppearance="?android:attr/textAppearanceListItemSmall" />
 
-        <Button
-            android:id="@+id/showMoreButton"
-            android:layout_width="wrap_content"
+        <com.google.android.flexbox.FlexboxLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scaleX="0.7"
-            android:scaleY="0.7"
-            android:text="Afficher plus"
-            app:layout_alignSelf="flex_end" />
+            app:flexDirection="row_reverse">
+
+
+            <Button
+                android:id="@+id/showMoreButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleX="0.7"
+                android:scaleY="0.7"
+                android:text="Afficher plus" />
+        </com.google.android.flexbox.FlexboxLayout>
     </com.google.android.flexbox.FlexboxLayout>
 
 </com.google.android.flexbox.FlexboxLayout>
