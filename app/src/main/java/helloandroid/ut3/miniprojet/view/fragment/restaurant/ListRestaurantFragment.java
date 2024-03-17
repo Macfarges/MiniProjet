@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -21,6 +20,8 @@ import helloandroid.ut3.miniprojet.data.domain.Restaurant;
 import helloandroid.ut3.miniprojet.data.service.FirebaseManager;
 
 public class ListRestaurantFragment extends Fragment {
+    private boolean isFirstLoad = true;
+
     public ListRestaurantFragment() {
     }
 
@@ -29,13 +30,22 @@ public class ListRestaurantFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_list_restaurant, container, false);
-        ProgressBar loadingProgressBar = view.findViewById(R.id.loadingProgressBar);
-        loadingProgressBar.setVisibility(View.VISIBLE);
+        // Replace loadingProgressBar with loadingView
         ListView listView = view.findViewById(R.id.restaurantsList);
         FloatingActionButton fabMap = view.findViewById(R.id.fabMap);
 
         final List<Restaurant> restaurantsArray = new ArrayList<>();
         final ArrayAdapter<Restaurant> arrayAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, restaurantsArray);
+
+        View loadingView;
+        // Show splash screen only on the first load
+        if (isFirstLoad) {
+            loadingView = view.findViewById(R.id.splash_screen);
+            loadingView.setVisibility(View.VISIBLE);
+        } else {
+            loadingView = view.findViewById(R.id.loadingProgressBar);
+            loadingView.setVisibility(View.VISIBLE);
+        }
 
         FirebaseManager.getInstance().getRestaurants(new FirebaseManager.DataCallback<List<Restaurant>>() {
             @Override
@@ -58,7 +68,11 @@ public class ListRestaurantFragment extends Fragment {
                             .addToBackStack(null)
                             .commit();
                 });
-                loadingProgressBar.setVisibility(View.GONE);
+
+                // Hide loading view (splash screen or progress bar) after data is loaded
+                loadingView.setVisibility(View.GONE);
+                // Set isFirstLoad to false after the first load
+                isFirstLoad = false;
             }
 
             @Override
@@ -67,6 +81,8 @@ public class ListRestaurantFragment extends Fragment {
                 // TODO Handle the error
             }
         });
+
+
         return view;
     }
 

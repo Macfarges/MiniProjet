@@ -1,10 +1,12 @@
 package helloandroid.ut3.miniprojet.data.service;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -85,8 +87,8 @@ public class FirebaseManager {
         return getRootRef().child(RESERVATIONS_NODE);
     }
 
-    private DatabaseReference getImagesRef() {
-        return getRootRef().child(IMAGES_NODE);
+    private StorageReference getImagesRef() {
+        return storage.getReference().child(IMAGES_NODE);
     }
 
     public void getRestaurants(final DataCallback<List<Restaurant>> callback) {
@@ -156,16 +158,31 @@ public class FirebaseManager {
         });
     }
 
-    public List<String> getRemoteUrls(List<String> picturesUrls) {
-        List<String> result = new ArrayList<>();
-        if (picturesUrls == null) {
-            return null;
-        }
+    public void getRemoteUrls(List<String> picturesUrls, final DataCallback<List<String>> callback) {
+        List<Task<Uri>> tasks = new ArrayList<>();
         for (String url : picturesUrls) {
             StorageReference imageRef = storage.getReference().child(url);
-            imageRef.getDownloadUrl().addOnSuccessListener(uri -> result.add(uri.toString()));
+            Task<Uri> task = imageRef.getDownloadUrl();
+            tasks.add(task);
         }
-        return result;
+
+        Tasks.whenAll(tasks).addOnSuccessListener(ignored -> {
+            List<String> result = new ArrayList<>();
+            for (Task<Uri> task : tasks) {
+                if (task.isSuccessful()) {
+                    Uri uri = task.getResult();
+                    result.add(uri.toString());
+                } else {
+                    // Handle failure, you might want to log or notify the user
+                    Log.e("FirebaseManager", "Failed to fetch URL: " + task.getException().getMessage());
+                }
+            }
+            callback.onSuccess(result);
+        }).addOnFailureListener(e -> {
+            // Handle failure, you might want to log or notify the user
+            Log.e("FirebaseManager", "Failed to fetch URLs: " + e.getMessage());
+            callback.onError(e);
+        });
     }
 
     public interface DataCallback<T> {

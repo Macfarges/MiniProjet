@@ -6,6 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".view.fragment.restaurant.ListRestaurantFragment">
 
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/splash_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/darkPurple"
+        android:visibility="gone"
+        app:alignContent="center"
+        app:alignItems="center"
+        app:flexDirection="column"
+        app:justifyContent="center">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/appName"
+            android:textColor="@color/white"
+            android:textSize="69dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/authors"
+            android:textColor="@color/white" />
+    </com.google.android.flexbox.FlexboxLayout>
+
     <ProgressBar
         android:id="@+id/loadingProgressBar"
         android:layout_width="wrap_content"
