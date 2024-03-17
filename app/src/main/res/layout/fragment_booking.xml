@@ -11,7 +11,7 @@
         android:layout_marginTop="@dimen/marginTop"
         android:autoSizeTextType="uniform"
         android:gravity="center"
-        android:text="@string/templateTitle"
+        android:text="@string/templateRestaurantName"
         android:textSize="@dimen/h1Size"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

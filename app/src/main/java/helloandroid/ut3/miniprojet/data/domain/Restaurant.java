@@ -1,5 +1,7 @@
 package helloandroid.ut3.miniprojet.data.domain;
 
+import androidx.annotation.NonNull;
+
 public class Restaurant {
     private String id;
     private String title;
@@ -81,6 +83,7 @@ public class Restaurant {
     }
 
     // Override toString for easy printing
+    @NonNull
     @Override
     public String toString() {
         return title;

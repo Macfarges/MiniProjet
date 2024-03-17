@@ -38,6 +38,7 @@
             android:contentDescription="@string/selectedImage"
             android:visibility="gone" />
 
+
         <LinearLayout
             android:id="@+id/choosePictureButtons"
             android:layout_width="wrap_content"
