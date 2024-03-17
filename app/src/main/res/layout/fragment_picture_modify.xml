@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/marginTop"
         android:gravity="center"
-        android:text="@string/modifyPictureTitle"
+        android:text="@string/viewPictureTitle"
         android:textSize="@dimen/h1Size"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -56,7 +56,7 @@
             android:id="@+id/deletePicture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/delete"
+            android:text="@string/deleteOfReview"
             tools:ignore="ButtonStyle" />
     </com.google.android.flexbox.FlexboxLayout>
 

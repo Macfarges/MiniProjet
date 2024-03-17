@@ -9,6 +9,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -32,16 +33,6 @@ public class ListRestaurantFragment extends Fragment {
         loadingProgressBar.setVisibility(View.VISIBLE);
         ListView listView = view.findViewById(R.id.restaurantsList);
         FloatingActionButton fabMap = view.findViewById(R.id.fabMap);
-        fabMap.setOnClickListener(v -> {
-//        TODO: Implementer click bouton map
-//            Fragment mapFragment = new MapFragment();
-//            FragmentManager fragmentManager = getParentFragmentManager();
-//            fragmentManager.beginTransaction()
-//                    .replace(R.id.fragmentContainerView, mapFragment, null)
-//                    .setReorderingAllowed(true)
-//                    .addToBackStack(null)
-//                    .commit();
-        });
 
         final List<Restaurant> restaurantsArray = new ArrayList<>();
         final ArrayAdapter<Restaurant> arrayAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, restaurantsArray);
@@ -49,6 +40,15 @@ public class ListRestaurantFragment extends Fragment {
         FirebaseManager.getInstance().getRestaurants(new FirebaseManager.DataCallback<List<Restaurant>>() {
             @Override
             public void onSuccess(List<Restaurant> restaurants) {
+                fabMap.setOnClickListener(v -> {
+                    Fragment mapsFragment = new MapsRestaurantFragment(restaurants);
+                    FragmentManager fragmentManager = getParentFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fragmentContainerView, mapsFragment, null)
+                            .setReorderingAllowed(true)
+                            .addToBackStack(null)
+                            .commit();
+                });
                 restaurantsArray.addAll(restaurants);
                 listView.setAdapter(arrayAdapter);
                 listView.setOnItemClickListener((adapter, view, position, arg) -> {

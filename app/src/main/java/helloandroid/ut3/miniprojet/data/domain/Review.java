@@ -26,7 +26,7 @@ public class Review {
         this.rating = rating;
         this.pictureUrls = pictureUrls;
         this.restaurantId = restaurantId;
-        this.date = new Date(); // Automatically set based on the current timestamp
+        this.date = new Date();
     }
 
     // Getters
@@ -58,7 +58,6 @@ public class Review {
         return restaurantId;
     }
 
-    // Override toString for easy printing
     @Override
     public String toString() {
         return rating + " - " + date + " - " + text;

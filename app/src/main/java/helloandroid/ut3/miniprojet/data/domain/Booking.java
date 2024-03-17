@@ -15,6 +15,7 @@ public class Booking {
     private int nbPersons;
 
     protected Booking() {
+        // Default constructor required for calls to DataSnapshot.getValue(Booking.class)
     }
 
 
