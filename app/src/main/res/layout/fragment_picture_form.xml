@@ -93,6 +93,7 @@
         android:id="@+id/filterLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="@dimen/marginBottomActions"
         android:visibility="gone"
         app:justifyContent="space_around"
         app:layout_constraintBottom_toTopOf="@+id/bottomButtons"

@@ -46,13 +46,13 @@ import helloandroid.ut3.utils.PictureFiltersUtils;
 
 public class PictureFormFragment extends Fragment implements MicrophoneUtils.MicrophoneCallback, AccelerometerUtils.AccelerometerCallback {
     private static final Handler mainHandler = new Handler(Looper.getMainLooper()); // Create handler associated with the main thread
-    private static final List<Pair<Drawable, float[]>> stickersList = new ArrayList<>();
     static Uri pictureUri;
     static ImageView pictureView;
     static Bitmap previousPicture1 = null;
     static Bitmap previousPicture2 = null;
     static Bitmap currentPicture1 = null;
     static Bitmap currentPicture2 = null;
+    private static List<Pair<Drawable, float[]>> stickersList;
     private final Handler accHandler = new Handler();
     private final Handler micHandler = new Handler();
     private final Handler backgroundHandler = new Handler(Looper.getMainLooper());
@@ -124,6 +124,8 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        stickersList = new ArrayList<>();
         View view = inflater.inflate(R.layout.fragment_picture_form, container, false);
         storageReference = FirebaseStorage.getInstance().getReference();
         pictureView = view.findViewById(R.id.pictureView);
@@ -177,7 +179,6 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
                 case 2:
                     // Remove the filter and show the original image
                     Glide.with(requireContext()).load(pictureUri).into(pictureView);
-                    FileUtils.applyStickersToImageView(pictureView, stickersList);
                     if (currentPicture2 != null) {
                         PictureFiltersUtils.applyFilter(
                                 pictureView,
@@ -186,6 +187,7 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
                         );
                         effect2Level = 0;
                     }
+                    FileUtils.applyStickersToImageView(pictureView, stickersList);
                     filter1Btn.setBackgroundColor(androidx.appcompat.R.attr.colorPrimary);
                     filter1Btn.setText(R.string.filtre_1);
                     previousPicture1 = null;
@@ -226,7 +228,6 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
                 case 2:
                     // Remove the filter and show the original image
                     Glide.with(requireContext()).load(pictureUri).into(pictureView);
-                    FileUtils.applyStickersToImageView(pictureView, stickersList);
                     if (currentPicture1 != null) {
                         PictureFiltersUtils.applyFilter(
                                 pictureView,
@@ -235,6 +236,7 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
                         );
                         effect1Level = 0;
                     }
+                    FileUtils.applyStickersToImageView(pictureView, stickersList);
                     filter2Btn.setBackgroundColor(androidx.appcompat.R.attr.colorPrimary);
                     filter2Btn.setText(R.string.filtre_2);
                     previousPicture2 = null;
@@ -292,16 +294,16 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
 
             // Add the drawable and coordinates to the list
             stickersList.add(new Pair<>(drawable, new float[]{x, y}));
-
-            // Apply all stickers to the pictureView
             FileUtils.applyStickersToImageView(pictureView, stickersList);
         }
     }
 
 
     private void addPictureBtn() {
-        Bitmap bitmap = FileUtils.getBitmapFromImageView(pictureView);
-        pictureUri = FileUtils.saveBitmapToFile(requireContext(), bitmap);
+        if ((!stickersList.isEmpty()) || (currentPicture2 != null || currentPicture1 != null)) {
+            Bitmap bitmap = FileUtils.getBitmapFromImageView(pictureView);
+            pictureUri = FileUtils.saveBitmapToFile(requireContext(), bitmap);
+        }
         previousPicture1 = null;
         currentPicture1 = null;
         previousPicture2 = null;
@@ -377,12 +379,12 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
             } else {
                 Glide.with(context).load(pictureUri).into(imgView);
             }
-            FileUtils.applyStickersToImageView(imgView, stickersList);
             PictureFiltersUtils.applyFilter(
                     imgView,
                     effectLevel,
                     filterType
             );
+            FileUtils.applyStickersToImageView(imgView, stickersList);
 
         }
     }

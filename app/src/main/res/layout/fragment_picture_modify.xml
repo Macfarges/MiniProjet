@@ -52,14 +52,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-
-        <Button
-            android:id="@+id/modifyPicture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/modify"
-            tools:ignore="ButtonStyle" />
-
         <Button
             android:id="@+id/deletePicture"
             android:layout_width="wrap_content"
@@ -68,5 +60,4 @@
             tools:ignore="ButtonStyle" />
     </com.google.android.flexbox.FlexboxLayout>
 
-    <!--TODO ajouter option prendre une photo (voir sujet) -->
 </androidx.constraintlayout.widget.ConstraintLayout>

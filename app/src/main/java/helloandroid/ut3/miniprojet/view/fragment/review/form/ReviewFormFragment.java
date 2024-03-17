@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,9 +103,22 @@ public class ReviewFormFragment extends Fragment {
             String newPictureURI = result.getString("newPictureURI");
             if (newPictureURI == null)
                 return;
-            Log.d("very ok", "is very ok");
+            if (pictureURIs.contains(newPictureURI)) {
+                Toast.makeText(requireContext(), "L'image est déjà présente", Toast.LENGTH_SHORT).show();
+                return;
+            }
             pictureURIs.add(Uri.parse(newPictureURI));
             pictures.add(pushNewPictureToLayout(Uri.parse(newPictureURI)));
+            updatePicturesCount(pictures.size());
+        });
+        getParentFragmentManager().setFragmentResultListener("removedPictureBundle", this, (requestKey, result) -> {
+            String toRemovePictureURI = result.getString("removedPictureURI");
+            if (toRemovePictureURI == null)
+                return;
+            int index = pictureURIs.indexOf(Uri.parse(toRemovePictureURI));
+            pictureURIs.remove(index);
+            pictures.remove(index);
+            picturesLayout.removeView(picturesLayout.getFlexItemAt(index + 1));
             updatePicturesCount(pictures.size());
         });
         picturesTv = view.findViewById(R.id.picturesTv);
@@ -124,7 +136,6 @@ public class ReviewFormFragment extends Fragment {
         for (ImageButton pictureBtn : pictures) {
             picturesLayout.addView(pictureBtn);
             pictureBtn.setOnClickListener(v -> {
-                picturesLayout.removeView(pictureBtn);
                 onModifyClick(picturesMap.get(pictureBtn));
 
             });
@@ -231,7 +242,6 @@ public class ReviewFormFragment extends Fragment {
                         picturesMap.put(pictureBtn, pictureUri);
                         pictureBtn.setOnClickListener(v -> onModifyClick(pictureUri));
                         // Notify the fragment that the picture has been loaded
-                        Log.d("okay", String.valueOf(picturesMap.size()));
                         return false;
                     }
                 })
