@@ -45,7 +45,6 @@ import helloandroid.ut3.utils.MicrophoneUtils;
 import helloandroid.ut3.utils.PictureFiltersUtils;
 
 public class PictureFormFragment extends Fragment implements MicrophoneUtils.MicrophoneCallback, AccelerometerUtils.AccelerometerCallback {
-    private static final Handler mainHandler = new Handler(Looper.getMainLooper()); // Create handler associated with the main thread
     static Uri pictureUri;
     static ImageView pictureView;
     static Bitmap previousPicture1 = null;
@@ -57,8 +56,8 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
     private final Handler micHandler = new Handler();
     private final Handler backgroundHandler = new Handler(Looper.getMainLooper());
     StorageReference storageReference;
-    ViewGroup choosePictureLayout, filtersLayout;
     Button addPictureBtn, selectPictureBtn, takePictureBtn, filter1Btn, filter2Btn;
+    private ViewGroup choosePictureLayout, filtersLayout;
     private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {

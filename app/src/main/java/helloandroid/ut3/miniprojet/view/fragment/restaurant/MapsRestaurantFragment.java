@@ -1,15 +1,29 @@
 package helloandroid.ut3.miniprojet.view.fragment.restaurant;
 
 import android.annotation.SuppressLint;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
+import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -18,16 +32,21 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import helloandroid.ut3.miniprojet.R;
 import helloandroid.ut3.miniprojet.data.domain.Restaurant;
+import helloandroid.ut3.miniprojet.data.service.FirebaseManager;
+import helloandroid.ut3.miniprojet.view.fragment.picture.PictureModifyFragment;
 
 public class MapsRestaurantFragment extends Fragment {
 
     private final List<Restaurant> restaurants;
+    private ViewGroup modalRestaurantLayout;
+    private FlexboxLayout picturesLayout;
 
     MapsRestaurantFragment(List<Restaurant> restaurants) {
         this.restaurants = restaurants;
@@ -40,13 +59,30 @@ public class MapsRestaurantFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_maps_restaurant, container, false);
+        modalRestaurantLayout = v.findViewById(R.id.modalRestaurantLayout);
+        picturesLayout = v.findViewById(R.id.picturesLayout);
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(googleMap -> {
                 googleMap.setOnMarkerClickListener(marker -> {
-                    System.out.println("Marker clicked, id: " + marker.getTag());
-                    // Return true to indicate that the click event is handled
+                    FirebaseManager.getInstance().getAllImagesForRestaurant((String) marker.getTag())
+                            .addOnSuccessListener(imageRefs -> {
+                                ((TextView) v.findViewById(R.id.modalRestaurantName)).setText(marker.getTitle());
+                                for (StorageReference imageRef : imageRefs) {
+                                    // Once the download URL is available, add the picture to the layout
+                                    imageRef.getDownloadUrl().addOnSuccessListener(this::pushNewPictureToLayout).addOnFailureListener(e -> {
+                                        // Handle any errors that occur during the URL retrieval process
+                                        Log.e("FirebaseManager", "Error getting download URL: " + e.getMessage());
+                                    });
+                                }
+                                modalRestaurantLayout.setVisibility(View.VISIBLE);
+                            })
+                            .addOnFailureListener(e -> {
+                                // Handle any errors that occur during the retrieval process
+                                Log.e("FirebaseManager", "Error fetching images: " + e.getMessage());
+                            });
+
                     return true;
                 });
 
@@ -86,5 +122,47 @@ public class MapsRestaurantFragment extends Fragment {
         double lat = Math.max(bounds.southwest.latitude, Math.min(latLng.latitude, bounds.northeast.latitude));
         double lng = Math.max(bounds.southwest.longitude, Math.min(latLng.longitude, bounds.northeast.longitude));
         return new LatLng(lat, lng);
+    }
+
+    private ImageButton pushNewPictureToLayout(Uri pictureUri) {
+        ImageButton pictureBtn = new ImageButton(requireContext());
+        int pictureSize = getResources().getDimensionPixelSize(R.dimen.imgLittleSquareDim);
+        pictureBtn.setLayoutParams(new ViewGroup.LayoutParams(pictureSize, pictureSize));
+        pictureBtn.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        pictureBtn.setBackground(null);
+        pictureBtn.setPadding(0, 0, 0, 0);
+        RequestOptions requestOptions = new RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .skipMemoryCache(false);
+        Glide.with(requireContext())
+                .load(pictureUri)
+                .apply(requestOptions)
+                .addListener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        pictureBtn.setOnClickListener(v -> onViewClick(pictureUri));
+                        return false;
+                    }
+                })
+                .into(pictureBtn);
+        picturesLayout.addView(pictureBtn);
+        return pictureBtn;
+    }
+
+    private void onViewClick(Uri pictureUri) {
+        getParentFragmentManager().beginTransaction()
+                .replace(
+                        R.id.fragmentContainerView,
+                        new PictureModifyFragment(pictureUri, true),
+                        null
+                )
+                .setReorderingAllowed(true)
+                .addToBackStack("pictureModify")
+                .commit();
     }
 }

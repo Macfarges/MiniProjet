@@ -1,8 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.fragment.app.FragmentContainerView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.fragment.restaurant.MapsRestaurantFragment" />
+    android:orientation="vertical">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="60" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/modalRestaurantLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="40"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/modalRestaurantName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/marginStart"
+            android:layout_marginTop="@dimen/marginTop"
+            android:gravity="center"
+            android:text="@string/templateRestaurantName"
+            android:textSize="@dimen/h1Size"
+            app:layout_constraintTop_toTopOf="@id/modalRestaurantLayout" />
+
+        <ScrollView
+            android:id="@+id/scrollViewPictures"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/modalRestaurantName">
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/picturesLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginTopSub"
+                app:alignContent="flex_start"
+                app:alignItems="flex_start"
+                app:dividerDrawable="@drawable/pictures_divider"
+                app:flexWrap="wrap"
+                app:showDivider="beginning|middle">
+
+            </com.google.android.flexbox.FlexboxLayout>
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
