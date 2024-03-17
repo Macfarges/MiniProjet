@@ -156,7 +156,7 @@ public class ReviewFormFragment extends Fragment {
         getParentFragmentManager().beginTransaction()
                 .replace(
                         R.id.fragmentContainerView,
-                        new PictureModifyFragment(pictureUri),
+                        new PictureModifyFragment(pictureUri, false),
                         null
                 )
                 .setReorderingAllowed(true)

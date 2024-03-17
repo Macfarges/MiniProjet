@@ -17,9 +17,11 @@ import helloandroid.ut3.miniprojet.R;
 
 public class PictureModifyFragment extends Fragment {
     private final Uri pictureUri;
+    private boolean viewOnly;
 
-    public PictureModifyFragment(Uri pictureUri) {
+    public PictureModifyFragment(Uri pictureUri, boolean viewOnly) {
         this.pictureUri = pictureUri;
+        this.viewOnly = viewOnly;
     }
 
     @Override
@@ -34,11 +36,13 @@ public class PictureModifyFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_picture_modify, container, false);
         ImageView pictureView = view.findViewById(R.id.pictureView);
         Glide.with(requireContext()).load(pictureUri).into(pictureView);
-        view.findViewById(R.id.deletePicture).setOnClickListener(
-                v -> {
-                    returnImageUri();
-                }
-        );
+        if (viewOnly) {
+            view.findViewById(R.id.deletePicture).setVisibility(View.GONE);
+        } else {
+            view.findViewById(R.id.deletePicture).setOnClickListener(
+                    v -> returnImageUri()
+            );
+        }
         return view;
     }
 
