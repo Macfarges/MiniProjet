@@ -5,8 +5,8 @@ import android.app.Dialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,9 +15,7 @@ import androidx.fragment.app.DialogFragment;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.flexbox.AlignItems;
 import com.google.android.flexbox.FlexboxLayout;
-import com.google.android.flexbox.FlexboxLayoutManager;
 
 import java.util.List;
 
@@ -63,13 +61,9 @@ public class TextPopupFragment extends DialogFragment {
 
         View view = requireActivity().getLayoutInflater().inflate(R.layout.fragment_review_details, null);
         picturesLayout = view.findViewById(R.id.picturesList);
-        FlexboxLayoutManager.LayoutParams layoutParams = new FlexboxLayoutManager.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        );
-        layoutParams.setFlexGrow(1);
-        layoutParams.setFlexBasisPercent(0.5f);
-        layoutParams.setAlignSelf(AlignItems.CENTER);
+
+
+        ((TextView) view.findViewById(R.id.reviewText)).setText(text);
 
         if (urls != null) {
             view.findViewById(R.id.loadingProgressBar).setVisibility(View.VISIBLE);
@@ -78,9 +72,10 @@ public class TextPopupFragment extends DialogFragment {
                 public void onSuccess(List<String> data) {
                     if (data != null) {
                         for (String url : data) {
-                            pushNewPictureToLayout(Uri.parse(url), layoutParams); // Pass the layout parameters
+                            pushNewPictureToLayout(Uri.parse(url)); // Pass the layout parameters
                         }
                         view.findViewById(R.id.loadingProgressBar).setVisibility(View.GONE);
+                        view.findViewById(R.id.reviewText).setVisibility(View.VISIBLE);
                     }
                 }
 
@@ -93,13 +88,13 @@ public class TextPopupFragment extends DialogFragment {
 
 
         builder.setTitle(title)
-                .setMessage(text)
+                //.setMessage(text)
                 .setView(view);
 
         return builder.create();
     }
 
-    private ImageButton pushNewPictureToLayout(Uri pictureUri, FlexboxLayoutManager.LayoutParams layoutParams) {
+    private ImageButton pushNewPictureToLayout(Uri pictureUri) {
         ImageButton pictureBtn = new ImageButton(requireContext());
         pictureBtn.setAdjustViewBounds(true);
         pictureBtn.setMaxHeight(500);
@@ -110,7 +105,7 @@ public class TextPopupFragment extends DialogFragment {
                 .load(pictureUri)
                 .apply(requestOptions)
                 .into(pictureBtn);
-        picturesLayout.addView(pictureBtn, layoutParams); // Add the image button with the layout parameters
+        picturesLayout.addView(pictureBtn); // Add the image button with the layout parameters
         return pictureBtn;
     }
 }

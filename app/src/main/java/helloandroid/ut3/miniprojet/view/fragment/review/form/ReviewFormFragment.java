@@ -106,7 +106,8 @@ public class ReviewFormFragment extends Fragment {
                 return;
             }
             pushNewPictureToLayout(Uri.parse(newPictureURI));
-            updatePicturesCount(picturesMap.size());
+            //Ceci est un bug je pense. Si on met pas + 1 c pas bon
+            updatePicturesCount(picturesMap.size() + 1);
         });
         getParentFragmentManager().setFragmentResultListener("removedPictureBundle", this, (requestKey, result) -> {
             String toRemovePictureURI = result.getString("removedPictureURI");
