@@ -49,9 +49,7 @@ import helloandroid.ut3.utils.FileUtils;
 
 public class ReviewFormFragment extends Fragment {
     private final Restaurant restaurant;
-    private final List<ImageButton> pictures = new ArrayList<>();
-    private final List<Uri> pictureURIs = new ArrayList<>();
-    private final Map<ImageButton, Uri> picturesMap = new HashMap<>();
+    private final Map<Uri, ImageButton> picturesMap = new HashMap<>();
     private final String genericErrorMessage = "Echec de l'ajout de votre avis";
     // TextWatcher to listen for changes in review and source EditText fields
     private final TextWatcher textWatcher = new TextWatcher() {
@@ -103,23 +101,20 @@ public class ReviewFormFragment extends Fragment {
             String newPictureURI = result.getString("newPictureURI");
             if (newPictureURI == null)
                 return;
-            if (pictureURIs.contains(newPictureURI)) {
+            if (picturesMap.containsValue(newPictureURI)) {
                 Toast.makeText(requireContext(), "L'image est déjà présente", Toast.LENGTH_SHORT).show();
                 return;
             }
-            pictureURIs.add(Uri.parse(newPictureURI));
-            pictures.add(pushNewPictureToLayout(Uri.parse(newPictureURI)));
-            updatePicturesCount(pictures.size());
+            pushNewPictureToLayout(Uri.parse(newPictureURI));
+            updatePicturesCount(picturesMap.size());
         });
         getParentFragmentManager().setFragmentResultListener("removedPictureBundle", this, (requestKey, result) -> {
             String toRemovePictureURI = result.getString("removedPictureURI");
             if (toRemovePictureURI == null)
                 return;
-            int index = pictureURIs.indexOf(Uri.parse(toRemovePictureURI));
-            pictureURIs.remove(index);
-            pictures.remove(index);
-            picturesLayout.removeView(picturesLayout.getFlexItemAt(index + 1));
-            updatePicturesCount(pictures.size());
+            picturesLayout.removeView(picturesMap.get(Uri.parse(toRemovePictureURI)));
+            picturesMap.remove(Uri.parse(toRemovePictureURI));
+            updatePicturesCount(picturesMap.size());
         });
         picturesTv = view.findViewById(R.id.picturesTv);
         stars = new ArrayList<>();
@@ -133,11 +128,12 @@ public class ReviewFormFragment extends Fragment {
             star.setOnClickListener(v -> onStarClick(star));
         }
         picturesLayout = view.findViewById(R.id.picturesLayout);
-        for (ImageButton pictureBtn : pictures) {
+        for (Uri uri : picturesMap.keySet()) {
+            ImageButton pictureBtn = picturesMap.get(uri);
             picturesLayout.addView(pictureBtn);
-            pictureBtn.setOnClickListener(v -> onModifyClick(picturesMap.get(pictureBtn)));
+            pictureBtn.setOnClickListener(v -> onModifyClick(uri));
         }
-        updatePicturesCount(pictures.size());
+        updatePicturesCount(picturesMap.size());
         EditText reviewEditText = view.findViewById(R.id.reviewEditText);
         EditText sourceEditText = view.findViewById(R.id.sourceEditText);
         Button submitReviewBtn = view.findViewById(R.id.submitReviewBtn);
@@ -231,7 +227,7 @@ public class ReviewFormFragment extends Fragment {
 
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        picturesMap.put(pictureBtn, pictureUri);
+                        picturesMap.put(pictureUri, pictureBtn);
                         pictureBtn.setOnClickListener(v -> onModifyClick(pictureUri));
                         // Notify the fragment that the picture has been loaded
                         return false;
@@ -246,11 +242,11 @@ public class ReviewFormFragment extends Fragment {
         List<String> pictureURLs = new ArrayList<>();
         long totalBytes = 0;
         AtomicLong currentUploadedBytes = new AtomicLong();
-        for (Uri pictureURI : pictureURIs) {
+        for (Uri pictureURI : picturesMap.keySet()) {
             totalBytes += FileUtils.getFileSizeFromUri(requireContext(), pictureURI);
         }
         progressIndicator.setMax(Math.toIntExact(totalBytes));
-        for (Uri pictureURI : pictureURIs) {
+        for (Uri pictureURI : picturesMap.keySet()) {
             String imagePath = String.format("reviews/%s/pictures/%s", restaurant.getId(), UUID.randomUUID().toString());
             pictureURLs.add(imagePath);
             storageReference.child(imagePath).putFile(pictureURI)
@@ -270,7 +266,7 @@ public class ReviewFormFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        for (ImageButton pictureBtn : pictures) {
+        for (ImageButton pictureBtn : picturesMap.values()) {
             picturesLayout.removeView(pictureBtn);
         }
     }
