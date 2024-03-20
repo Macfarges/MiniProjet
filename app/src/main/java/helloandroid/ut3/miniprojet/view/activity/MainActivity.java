@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainerView, ListRestaurantFragment.class, null)
+                .replace(R.id.fragmentContainerView, new ListRestaurantFragment(), null)
                 .setReorderingAllowed(true)
                 .commit();
 

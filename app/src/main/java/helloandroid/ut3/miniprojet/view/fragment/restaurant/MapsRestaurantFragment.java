@@ -36,6 +36,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import helloandroid.ut3.miniprojet.R;
 import helloandroid.ut3.miniprojet.data.domain.Restaurant;
@@ -47,6 +48,7 @@ public class MapsRestaurantFragment extends Fragment {
     private final List<Restaurant> restaurants;
     private ViewGroup modalRestaurantLayout;
     private FlexboxLayout picturesLayout;
+    private String restaurantSelectedId;
 
     MapsRestaurantFragment(List<Restaurant> restaurants) {
         this.restaurants = restaurants;
@@ -68,6 +70,13 @@ public class MapsRestaurantFragment extends Fragment {
                 googleMap.setOnMarkerClickListener(marker -> {
                     FirebaseManager.getInstance().getAllImagesForRestaurant((String) marker.getTag())
                             .addOnSuccessListener(imageRefs -> {
+                                if (Objects.equals((String) marker.getTag(), restaurantSelectedId)) {
+                                    return;
+                                }
+                                restaurantSelectedId = (String) marker.getTag();
+
+                                picturesLayout.removeAllViews();
+
                                 ((TextView) v.findViewById(R.id.modalRestaurantName)).setText(marker.getTitle());
                                 for (StorageReference imageRef : imageRefs) {
                                     // Once the download URL is available, add the picture to the layout
