@@ -132,33 +132,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/picturesTv">
 
-        <LinearLayout
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/picturesLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginTop="@dimen/marginTopSub"
+            app:alignContent="flex_start"
+            app:alignItems="flex_start"
+            app:dividerDrawable="@drawable/pictures_divider"
+            app:flexWrap="wrap"
+            app:showDivider="beginning|middle">
 
-            <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/picturesLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/marginTopSub"
-                app:alignContent="flex_start"
-                app:alignItems="flex_start"
-                app:dividerDrawable="@drawable/pictures_divider"
-                app:flexWrap="wrap"
-                app:showDivider="beginning|middle">
-
-                <Button
-                    android:id="@+id/addPictureBtn"
-                    android:layout_width="@dimen/imgLittleSquareDim"
-                    android:layout_height="@dimen/imgLittleSquareDim"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    android:text="@string/symbolAdd"
-                    android:textSize="54sp"
-                    app:cornerRadius="0dp" />
-            </com.google.android.flexbox.FlexboxLayout>
-        </LinearLayout>
+            <Button
+                android:id="@+id/addPictureBtn"
+                android:layout_width="@dimen/imgLittleSquareDim"
+                android:layout_height="@dimen/imgLittleSquareDim"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="@string/symbolAdd"
+                android:textSize="54sp"
+                app:cornerRadius="0dp" />
+        </com.google.android.flexbox.FlexboxLayout>
     </ScrollView>
 
     <Button

@@ -11,12 +11,27 @@
         android:layout_marginTop="@dimen/marginTop"
         android:autoSizeTextType="uniform"
         android:gravity="center"
-        android:text="@string/templateTitle"
+        android:text="@string/templateRestaurantName"
         android:textSize="@dimen/h1Size"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/marginTop"
+        android:autofillHints="reviewString"
+        android:ems="10"
+        android:focusedByDefault="true"
+        android:gravity="top"
+        android:hint="Nom pour réservation"
+        android:inputType="textMultiLine"
+        android:lines="1"
+        app:layout_constraintBottom_toTopOf="@+id/restaurantBody"
+        app:layout_constraintTop_toBottomOf="@+id/restaurantName" />
 
     <TextView
         android:id="@+id/restaurantBody"
@@ -27,7 +42,7 @@
         android:text="@string/nbPersons"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/restaurantName" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextText" />
 
     <SeekBar
         android:id="@+id/seekBar"

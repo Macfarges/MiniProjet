@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -19,31 +20,45 @@ import helloandroid.ut3.miniprojet.data.domain.Restaurant;
 import helloandroid.ut3.miniprojet.data.service.FirebaseManager;
 
 public class ListRestaurantFragment extends Fragment {
+    private boolean isFirstLoad = true;
+
     public ListRestaurantFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_list_restaurant, container, false);
+        // Replace loadingProgressBar with loadingView
         ListView listView = view.findViewById(R.id.restaurantsList);
         FloatingActionButton fabMap = view.findViewById(R.id.fabMap);
-        fabMap.setOnClickListener(v -> {
-//        TODO: Implementer click bouton map
-//            Fragment mapFragment = new MapFragment();
-//            FragmentManager fragmentManager = getParentFragmentManager();
-//            fragmentManager.beginTransaction()
-//                    .replace(R.id.fragmentContainerView, mapFragment, null)
-//                    .setReorderingAllowed(true)
-//                    .addToBackStack(null)
-//                    .commit();
-        });
+
         final List<Restaurant> restaurantsArray = new ArrayList<>();
         final ArrayAdapter<Restaurant> arrayAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, restaurantsArray);
+
+        View loadingView;
+        // Show splash screen only on the first load
+        if (isFirstLoad) {
+            loadingView = view.findViewById(R.id.splash_screen);
+            loadingView.setVisibility(View.VISIBLE);
+        } else {
+            loadingView = view.findViewById(R.id.loadingProgressBar);
+            loadingView.setVisibility(View.VISIBLE);
+        }
 
         FirebaseManager.getInstance().getRestaurants(new FirebaseManager.DataCallback<List<Restaurant>>() {
             @Override
             public void onSuccess(List<Restaurant> restaurants) {
+                fabMap.setOnClickListener(v -> {
+                    Fragment mapsFragment = new MapsRestaurantFragment(restaurants);
+                    FragmentManager fragmentManager = getParentFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fragmentContainerView, mapsFragment, null)
+                            .setReorderingAllowed(true)
+                            .addToBackStack(null)
+                            .commit();
+                });
                 restaurantsArray.addAll(restaurants);
                 listView.setAdapter(arrayAdapter);
                 listView.setOnItemClickListener((adapter, view, position, arg) -> {
@@ -53,6 +68,11 @@ public class ListRestaurantFragment extends Fragment {
                             .addToBackStack(null)
                             .commit();
                 });
+
+                // Hide loading view (splash screen or progress bar) after data is loaded
+                loadingView.setVisibility(View.GONE);
+                // Set isFirstLoad to false after the first load
+                isFirstLoad = false;
             }
 
             @Override
@@ -61,6 +81,9 @@ public class ListRestaurantFragment extends Fragment {
                 // TODO Handle the error
             }
         });
+
+
         return view;
     }
+
 }
