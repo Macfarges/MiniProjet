@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.util.Pair;
+import android.util.TypedValue;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -102,7 +103,6 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
 
     //TODO : Corriger bug filtre 2 (aspect grisé parfois, si utilisé après filtre 1)
     //TODO : Corriger bug annulation autre filtre (effectLevel pas correct à priori)
-    //TODO : trouver une meilleure solution (bug du bouton retour lors du process du filtre 1)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -127,6 +127,10 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //TODO : mettre cela dans une methode
+        TypedValue typedValue = new TypedValue();
+        requireContext().getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+        int colorPrimary = typedValue.data;
 
         stickersList = new ArrayList<>();
         View view = inflater.inflate(R.layout.fragment_picture_form, container, false);
@@ -195,7 +199,7 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
                         effect2Level = 0;
                     }
                     FileUtils.applyStickersToImageView(pictureView, stickersList);
-                    filter1Btn.setBackgroundColor(androidx.appcompat.R.attr.colorPrimary);
+                    filter1Btn.setBackgroundColor(colorPrimary);
                     filter1Btn.setText(R.string.filtre_1);
                     previousPicture1 = null;
                     currentPicture1 = null;
@@ -244,7 +248,7 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
                         effect1Level = 0;
                     }
                     FileUtils.applyStickersToImageView(pictureView, stickersList);
-                    filter2Btn.setBackgroundColor(androidx.appcompat.R.attr.colorPrimary);
+                    filter2Btn.setBackgroundColor(colorPrimary);
                     filter2Btn.setText(R.string.filtre_2);
                     previousPicture2 = null;
                     currentPicture2 = null;
@@ -295,12 +299,17 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
         if (draggedView.getId() == R.id.smallImageView || draggedView.getId() == R.id.smallImageView2) {
             float x = event.getX();
             float y = event.getY();
-
             // Get the Drawable associated with the smallImageView
             Drawable drawable = draggedView.getDrawable();
 
+            // Calculate the coordinates for the center of the sticker
+            int stickerWidth = drawable.getIntrinsicWidth();
+            int stickerHeight = drawable.getIntrinsicHeight();
+            float centerX = x - (stickerWidth / 2);
+            float centerY = y - (stickerHeight / 2);
+
             // Add the drawable and coordinates to the list
-            stickersList.add(new Pair<>(drawable, new float[]{x, y}));
+            stickersList.add(new Pair<>(drawable, new float[]{centerX, centerY}));
             FileUtils.applyStickersToImageView(pictureView, stickersList);
         }
     }

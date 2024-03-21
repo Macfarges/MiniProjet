@@ -37,4 +37,5 @@
     <string name="deleteOfReview">Supprimer de l\'avis</string>
     <string name="authors">Matthias Farges et Sylvain Roehrig</string>
     <string name="note">Note</string>
+    <string name="nbAvis">nbAvis</string>
 </resources>
