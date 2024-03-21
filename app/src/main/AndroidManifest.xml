@@ -15,6 +15,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MiniProjet"
         tools:targetApi="31">
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAfS1rauw0uAoKTyOw6IHi8XJZkYticOMM" />

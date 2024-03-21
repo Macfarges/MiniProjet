@@ -12,8 +12,10 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Pair;
 import android.util.TypedValue;
@@ -33,13 +35,16 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import helloandroid.ut3.miniprojet.R;
@@ -69,25 +74,15 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
             if (result.getResultCode() == RESULT_OK) {
                 Intent data = result.getData();
                 if (data != null) {
-                    if (data.getAction() != null && data.getAction().equals("inline-data")) {
-                        Bundle extras = data.getExtras();
-                        if (extras != null) {
-                            Bitmap photo = (Bitmap) extras.get("data");
-                            if (photo != null) {
-                                choosePictureLayout.setVisibility(View.GONE);
-                                pictureView.setVisibility(View.VISIBLE);
-                                pictureUri = FileUtils.saveBitmapToFile(requireContext(), photo);
-                            }
-                        }
-                    } else if (data.getData() != null) {
+                    if (data.getData() != null) {
                         pictureUri = data.getData();
                     }
-                    choosePictureLayout.setVisibility(View.GONE);
-                    filtersLayout.setVisibility(View.VISIBLE);
-                    pictureView.setVisibility(View.VISIBLE);
-                    Glide.with(requireContext()).load(pictureUri).into(pictureView);
-                    addPictureBtn.setEnabled(true);
                 }
+                choosePictureLayout.setVisibility(View.GONE);
+                filtersLayout.setVisibility(View.VISIBLE);
+                pictureView.setVisibility(View.VISIBLE);
+                Glide.with(requireContext()).load(pictureUri).into(pictureView);
+                addPictureBtn.setEnabled(true);
             }
         }
     });
@@ -149,10 +144,18 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
             intent.setType("image/*");
             activityResultLauncher.launch(intent);
         });
+
         takePictureBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            File picturesDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            String fileName = "image_" + new Date().getTime() + ".jpg";
+            File imageFile = new File(picturesDirectory, fileName);
+            pictureUri = FileProvider.getUriForFile(requireContext(), requireContext().getApplicationContext().getPackageName() + ".provider", imageFile);
+
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri);
             activityResultLauncher.launch(intent);
         });
+
         filter1Btn.setOnClickListener(v -> {
             switch (filter1State) {
                 case 0:
