@@ -46,6 +46,7 @@
             android:id="@+id/star"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:contentDescription="@string/star"
             android:src="@drawable/ic_star_filled_34"
@@ -58,6 +59,15 @@
             android:layout_gravity="center"
             android:text="@string/note"
             android:textSize="@dimen/h2size" />
+
+        <TextView
+            android:id="@+id/nbAvis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/nbAvis"
+            android:textSize="@dimen/h2size"
+            android:visibility="gone" />
     </LinearLayout>
 
     <com.google.android.flexbox.FlexboxLayout

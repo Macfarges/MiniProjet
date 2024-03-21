@@ -92,6 +92,8 @@ public class RestaurantFragment extends Fragment {
                         avrgGrade += rev.getRating();
                     }
                     avrgGrade /= data.size();
+                    ((TextView) view.findViewById(R.id.nbAvis)).setText("(" + data.size() + " avis)");
+                    view.findViewById(R.id.nbAvis).setVisibility(View.VISIBLE);
                     // Format avrgGrade to display two decimal places
                     noteText = String.format("%.1f", avrgGrade);
 
