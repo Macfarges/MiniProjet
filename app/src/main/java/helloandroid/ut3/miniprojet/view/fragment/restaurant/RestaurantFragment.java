@@ -58,13 +58,11 @@ public class RestaurantFragment extends Fragment {
                         .setReorderingAllowed(true)
                         .addToBackStack(null)
                         .commit();
-                final View.OnClickListener reserveAction = v -> {
-                    getParentFragmentManager().beginTransaction()
-                            .replace(R.id.fragmentContainerView, new BookingFragment(restaurant), null)
-                            .setReorderingAllowed(true)
-                            .addToBackStack(null)
-                            .commit();
-                };
+                final View.OnClickListener reserveAction = v -> getParentFragmentManager().beginTransaction()
+                        .replace(R.id.fragmentContainerView, new BookingFragment(restaurant), null)
+                        .setReorderingAllowed(true)
+                        .addToBackStack(null)
+                        .commit();
                 String noteText;
                 RecyclerView reviewsList = view.findViewById(R.id.reviewsList);
                 FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(requireContext());

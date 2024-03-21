@@ -8,10 +8,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -23,7 +25,6 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -37,6 +38,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import helloandroid.ut3.miniprojet.R;
 import helloandroid.ut3.miniprojet.data.domain.Restaurant;
@@ -46,12 +48,27 @@ import helloandroid.ut3.miniprojet.view.fragment.picture.PictureModifyFragment;
 public class MapsRestaurantFragment extends Fragment {
 
     private final List<Restaurant> restaurants;
-    private ViewGroup modalRestaurantLayout;
-    private FlexboxLayout picturesLayout;
+    private ViewGroup modalRestaurantLayout, mapsLayout, picturesLayout;
     private String restaurantSelectedId;
 
     MapsRestaurantFragment(List<Restaurant> restaurants) {
         this.restaurants = restaurants;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (mapsLayout.getVisibility() == View.GONE) {
+                    mapsLayout.setVisibility(View.VISIBLE);
+                } else {
+                    getParentFragmentManager().popBackStack();
+                }
+
+            }
+        });
     }
 
     @SuppressLint("PotentialBehaviorOverride")
@@ -63,6 +80,7 @@ public class MapsRestaurantFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_maps_restaurant, container, false);
         modalRestaurantLayout = v.findViewById(R.id.modalRestaurantLayout);
         picturesLayout = v.findViewById(R.id.picturesLayout);
+        mapsLayout = v.findViewById(R.id.mapsLayout);
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
@@ -77,7 +95,31 @@ public class MapsRestaurantFragment extends Fragment {
 
                                 picturesLayout.removeAllViews();
 
-                                ((TextView) v.findViewById(R.id.modalRestaurantName)).setText(marker.getTitle());
+                                Button modalRestaurantNameBtn = v.findViewById(R.id.modalRestaurantNameBtn);
+                                modalRestaurantNameBtn.setOnClickListener(v1 -> {
+                                    Optional<Restaurant> optionalRestaurant = restaurants.stream()
+                                            .filter(restaurant -> restaurant.getId().equals(restaurantSelectedId))
+                                            .findFirst();
+
+                                    if (optionalRestaurant.isPresent()) {
+                                        mapsLayout.setVisibility(View.GONE);
+                                        getParentFragmentManager().beginTransaction()
+                                                .replace(
+                                                        R.id.containerOnMaps,
+                                                        new RestaurantFragment(
+                                                                optionalRestaurant.get()),
+                                                        null
+                                                )
+                                                .setReorderingAllowed(true)
+                                                .commit();
+                                    } else {
+                                        Toast.makeText(requireContext(), "Restaurant not found", Toast.LENGTH_SHORT).show();
+                                    }
+
+
+                                });
+                                modalRestaurantNameBtn.setText(marker.getTitle());
+
                                 for (StorageReference imageRef : imageRefs) {
                                     // Once the download URL is available, add the picture to the layout
                                     imageRef.getDownloadUrl().addOnSuccessListener(this::pushNewPictureToLayout).addOnFailureListener(e -> {
@@ -133,7 +175,7 @@ public class MapsRestaurantFragment extends Fragment {
         return new LatLng(lat, lng);
     }
 
-    private ImageButton pushNewPictureToLayout(Uri pictureUri) {
+    private void pushNewPictureToLayout(Uri pictureUri) {
         ImageButton pictureBtn = new ImageButton(requireContext());
         int pictureSize = getResources().getDimensionPixelSize(R.dimen.imgLittleSquareDim);
         pictureBtn.setLayoutParams(new ViewGroup.LayoutParams(pictureSize, pictureSize));
@@ -160,18 +202,17 @@ public class MapsRestaurantFragment extends Fragment {
                 })
                 .into(pictureBtn);
         picturesLayout.addView(pictureBtn);
-        return pictureBtn;
     }
 
     private void onViewClick(Uri pictureUri) {
+        mapsLayout.setVisibility(View.GONE);
         getParentFragmentManager().beginTransaction()
                 .replace(
-                        R.id.fragmentContainerView,
+                        R.id.containerOnMaps,
                         new PictureModifyFragment(pictureUri, true),
                         null
                 )
                 .setReorderingAllowed(true)
-                .addToBackStack("pictureModify")
                 .commit();
     }
 }
