@@ -295,12 +295,17 @@ public class PictureFormFragment extends Fragment implements MicrophoneUtils.Mic
         if (draggedView.getId() == R.id.smallImageView || draggedView.getId() == R.id.smallImageView2) {
             float x = event.getX();
             float y = event.getY();
-
             // Get the Drawable associated with the smallImageView
             Drawable drawable = draggedView.getDrawable();
 
+            // Calculate the coordinates for the center of the sticker
+            int stickerWidth = drawable.getIntrinsicWidth();
+            int stickerHeight = drawable.getIntrinsicHeight();
+            float centerX = x - (stickerWidth / 2);
+            float centerY = y - (stickerHeight / 2);
+
             // Add the drawable and coordinates to the list
-            stickersList.add(new Pair<>(drawable, new float[]{x, y}));
+            stickersList.add(new Pair<>(drawable, new float[]{centerX, centerY}));
             FileUtils.applyStickersToImageView(pictureView, stickersList);
         }
     }
